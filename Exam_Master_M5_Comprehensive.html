@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบเตรียมสอบพิชิต 3 วิชา: ประวัติศาสตร์สากล • ภาษาไทย & มัทนะพาธา • ต้านทุจริตศึกษา</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Sarabun', 'sans-serif'],
+            display: ['Kanit', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f5f7ff',
+              100: '#ebf0fe',
+              500: '#4361ee',
+              600: '#3a0ca3',
+              700: '#2b0975',
+            },
+            history: '#f59e0b',
+            thai: '#ec4899',
+            anticorrupt: '#10b981',
+            mattan: '#e11d48'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Sarabun', sans-serif; scroll-behavior: smooth; }
+    h1, h2, h3, h4, .font-display { font-family: 'Kanit', sans-serif; }
+    .glass { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(12px); }
+    .dark .glass { background: rgba(17, 24, 39, 0.88); backdrop-filter: blur(12px); }
+    .badge-guru { background: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
+    .badge-laghu { background: #dbeafe; color: #1e40af; border: 1px solid #60a5fa; }
+    .tab-active { border-bottom: 3px solid #4361ee; color: #4361ee; font-weight: 600; }
+    .glow-gold { box-shadow: 0 0 25px rgba(245, 158, 11, 0.4); }
+    .glow-rose { box-shadow: 0 0 25px rgba(225, 29, 72, 0.4); }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+  <!-- Top Sticky Navigation -->
+  <header class="sticky top-0 z-50 glass border-b border-slate-200 dark:border-slate-800 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-rose-500 to-amber-400 flex items-center justify-center text-white font-bold shadow-md">
+            🎓
+          </div>
+          <div>
+            <span class="font-display font-bold text-lg sm:text-xl text-slate-900 dark:text-white tracking-tight">EXAM MASTER M.5</span>
+            <span class="hidden sm:inline-block ml-2 text-xs px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-medium">รวม 3 หมวดเข้มข้น</span>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="hidden md:flex space-x-1 font-display text-sm font-medium">
+          <button onclick="switchTab('dashboard')" id="nav-dashboard" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-indigo-600 dark:text-indigo-400 font-semibold">แดชบอร์ด</button>
+          <button onclick="switchTab('history')" id="nav-history" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">📜 ประวัติศาสตร์สากล</button>
+          <button onclick="switchTab('thai')" id="nav-thai" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">🇹🇭 ภาษาไทย & ครุ-ลหุ</button>
+          <button onclick="switchTab('mattan')" id="nav-mattan" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">🌹 มัทนะพาธา</button>
+          <button onclick="switchTab('anticorrupt')" id="nav-anticorrupt" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">⚖️ ต้านทุจริต</button>
+          <button onclick="switchTab('exam')" id="nav-exam" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">📝 คลังข้อสอบจริง</button>
+          <button onclick="switchTab('boss')" id="nav-boss" class="px-3 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold animate-pulse shadow-sm">⚔️ FINAL BOSS</button>
+        </nav>
+
+        <!-- Actions -->
+        <div class="flex items-center space-x-2">
+          <button onclick="toggleDarkMode()" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <span id="theme-icon">🌙</span>
+          </button>
+          <button onclick="downloadSelf()" class="inline-flex items-center space-x-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold py-2 px-3 sm:px-4 rounded-xl shadow transition transform active:scale-95">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            <span>ดาวน์โหลด HTML</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Bar -->
+    <div class="md:hidden flex overflow-x-auto space-x-2 px-4 py-2 border-t border-slate-200 dark:border-slate-800 text-xs font-display">
+      <button onclick="switchTab('dashboard')" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 font-semibold">🏠 แดชบอร์ด</button>
+      <button onclick="switchTab('history')" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-200">📜 ประวัติศาสตร์</button>
+      <button onclick="switchTab('thai')" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-200">🇹🇭 ไทย&ครุ-ลหุ</button>
+      <button onclick="switchTab('mattan')" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-200">🌹 มัทนะพาธา</button>
+      <button onclick="switchTab('anticorrupt')" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-200">⚖️ ต้านทุจริต</button>
+      <button onclick="switchTab('exam')" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-200">📝 คลังข้อสอบ</button>
+      <button onclick="switchTab('boss')" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-rose-600 text-white font-bold">⚔️ FINAL BOSS</button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <!-- ============================================================== -->
+    <!-- SECTION: DASHBOARD -->
+    <!-- ============================================================== -->
+    <section id="tab-dashboard" class="tab-content space-y-8">
+      <!-- Hero Banner -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-purple-950 text-white p-6 sm:p-10 shadow-2xl border border-indigo-900/50">
+        <div class="relative z-10 max-w-3xl">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-xs font-semibold mb-4">
+            <span>✨ ระบบติวสรุป & เจาะลึกแนวข้อสอบ ม.ปลาย</span>
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-bold tracking-tight mb-4 font-display leading-tight">
+            สรุปครบ 3 หมวดเข้มข้น <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-rose-300 to-indigo-300">พิชิตข้อสอบ ม.5 ทุกประเด็น</span>
+          </h1>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
+            รวมเนื้อหาละเอียดตามชีทและแนวข้อสอบครู: เมโสโปเตเมีย • กรีกโบราณ • การอ่านตีความภาษาไทย • ระบบตรวจวิเคราะห์ครุ-ลหุอัตโนมัติ • ถอดรหัสมัทนะพาธาแบบเจาะลึก • ต้านทุจริตระบบคิดฐาน 2 vs ฐาน 10 และโจทย์ชี้ชะตา Final Boss ห้ามพลาด!
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <button onclick="switchTab('exam')" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-display font-semibold text-sm shadow-lg shadow-indigo-600/30 transition">
+              🚀 เริ่มทำแบบทดสอบจำลอง
+            </button>
+            <button onclick="switchTab('boss')" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-display font-semibold text-sm shadow-lg shadow-rose-600/30 transition">
+              ⚔️ ลุย Final Boss (ตอนจบมัทนะพาธา)
+            </button>
+            <button onclick="downloadSelf()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-display font-semibold text-sm transition">
+              💾 ดาวน์โหลดไฟล์ไว้ติวออฟไลน์
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Nav Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <!-- History Card -->
+        <div onclick="switchTab('history')" class="cursor-pointer group p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-amber-400 dark:hover:border-amber-500 transition duration-300">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+            📜
+          </div>
+          <h2 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-2">1. ประวัติศาสตร์สากล</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+            ดินแดนพระจันทร์เสี้ยว (Fertile Crescent), แม่น้ำไทกริส-ยูเฟรทีส, อักษรคูนิฟอร์ม, ซิกกูแรต, ประมวลกฎหมายฮัมมูราบี, นครรัฐกรีก เอเธนส์-สปาร์ตา, เฮลเลน และสงครามประวัติศาสตร์
+          </p>
+          <span class="text-xs font-semibold text-amber-600 dark:text-amber-400 group-hover:underline">เข้าสู่บทเรียน &rarr;</span>
+        </div>
+
+        <!-- Thai Language Card -->
+        <div onclick="switchTab('thai')" class="cursor-pointer group p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-indigo-400 dark:hover:border-indigo-500 transition duration-300">
+          <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+            🇹🇭
+          </div>
+          <h2 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-2">2. ภาษาไทย & ครุ-ลหุ</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+            ระบบคิดการอ่าน: แปลความ ตีความ ขยายความ, ข้อเท็จจริง vs ข้อคิดเห็น พร้อม<strong>ระบบตรวจและไฮไลต์ครุ-ลหุอัตโนมัติ</strong> (เช่น วรพักตร์จะหมดจะหมอง)
+          </p>
+          <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 group-hover:underline">เข้าสู่บทเรียน &rarr;</span>
+        </div>
+
+        <!-- Mattanaphatha Card -->
+        <div onclick="switchTab('mattan')" class="cursor-pointer group p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-rose-400 dark:hover:border-rose-500 transition duration-300">
+          <div class="w-12 h-12 rounded-xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+            🌹
+          </div>
+          <h2 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-2">3. มัทนะพาธา</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+            ยอดของบทละครพูดคำฉันท์, วิเคราะห์ตัวละคร (มัทนา สุเทษณ์ ชัยเสน มายาวิน), ศัพท์ข้อสอบเทวดา, กลอนอมตะ และความเชื่อเรื่องกรรม
+          </p>
+          <span class="text-xs font-semibold text-rose-600 dark:text-rose-400 group-hover:underline">เข้าสู่บทเรียน &rarr;</span>
+        </div>
+
+        <!-- Anti-Corruption Card -->
+        <div onclick="switchTab('anticorrupt')" class="cursor-pointer group p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-500 transition duration-300">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+            ⚖️
+          </div>
+          <h2 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-2">4. ต้านทุจริตศึกษา</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+            ผลประโยชน์ทับซ้อน (Conflict of Interests), การเปรียบเทียบระบบคิดฐาน 2 (ดิจิทัล) กับ ฐาน 10 (แอนะล็อก), ประโยชน์ส่วนตน vs ส่วนรวม และการวิเคราะห์ข่าวดัง
+          </p>
+          <span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 group-hover:underline">เข้าสู่บทเรียน &rarr;</span>
+        </div>
+      </div>
+
+      <!-- Exam Master Checklist / Warning Banner -->
+      <div class="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-2xl p-6">
+        <div class="flex items-start space-x-4">
+          <span class="text-3xl">⚠️</span>
+          <div>
+            <h3 class="font-display font-bold text-amber-900 dark:text-amber-200 text-base sm:text-lg">จุดจำสำคัญที่ข้อสอบชอบหลอก (Cheat-Sheet Alert)</h3>
+            <ul class="mt-2 text-xs sm:text-sm text-amber-800 dark:text-amber-300/90 space-y-1.5 list-disc list-inside">
+              <li><strong>กฎหมายฮัมมูราบี:</strong> หลัก "ตาต่อตา ฟันต่อฟัน" ใช้จริงเฉพาะบุคคลใน<strong>ชนชั้นเดียวกัน</strong> (ถ้าทำร้ายทาสจะจ่ายแค่ค่าปรับครึ่งหนึ่งของราคาทาส สะท้อนสังคมแบ่งชนชั้น)</li>
+              <li><strong>ซิกกูแรต:</strong> คือศาสนสถาน/เทวสถานบูชาเทพเจ้าประจำนครรัฐ <em>ไม่ใช่สุสานฝังศพกษัตริย์</em> (ต่างจากพีระมิดอียิปต์)</li>
+              <li><strong>คำประพันธ์บังคับครุ-ลหุ:</strong> มีเพียง <strong>"ฉันท์"</strong> เท่านั้นที่บังคับครุ-ลหุอย่างเคร่งครัด</li>
+              <li><strong>"ตูข้า" ในมัทนะพาธา:</strong> ประโยค "นางยังงงงวย ตูข้าจะแก้บัดนี้" คำว่า <strong>ตูข้า</strong> หมายถึง <strong>มายาวิน</strong></li>
+              <li><strong>เมืองของท้าวชัยเสน:</strong> ครองเมือง <strong>หัสตินาปุระ</strong> (ไม่ใช่เมืองมถุรา หรืออโยธยา)</li>
+              <li><strong>ตอนจบมัทนะพาธา (Final Boss ห้ามผิด):</strong> มัทนาถูกสาปให้เป็น <strong>ดอกกุหลาบตลอดกาล</strong> (ไม่สามารถกลับเป็นมนุษย์ได้อีกเลย) และชัยเสนขุดต้นกุหลาบกลับไปปลูกในอุทยาน</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SECTION: 1. ประวัติศาสตร์สากล (WORLD HISTORY) -->
+    <!-- ============================================================== -->
+    <section id="tab-history" class="tab-content hidden space-y-8">
+      <!-- Section Header -->
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">หมวดที่ 1 • World History</span>
+          <h2 class="text-2xl sm:text-3xl font-bold font-display text-slate-900 dark:text-white">อารยธรรมเมโสโปเตเมีย & กรีกโบราณ</h2>
+        </div>
+        <div class="flex items-center space-x-2 text-xs">
+          <span class="px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-medium">เก็งข้อสอบตรงจุด</span>
+        </div>
+      </div>
+
+      <!-- Mesopotamia Deep Dive -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- 1.1 Fertile Crescent & Geography -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+          <div class="flex items-center space-x-3">
+            <span class="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xl">🌙</span>
+            <div>
+              <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">ดินแดนพระจันทร์เสี้ยวอุดมสมบูรณ์ (Fertile Crescent)</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">ที่ตั้งและสภาพทางภูมิศาสตร์</p>
+            </div>
+          </div>
+          <div class="text-sm text-slate-600 dark:text-slate-300 space-y-3 leading-relaxed">
+            <p>
+              <strong>ความหมาย & รูปร่าง:</strong> บริเวณแถบโค้งรูปพระจันทร์เสี้ยวที่ทอดยาวตั้งแต่ <strong>อ่าวเปอร์เซีย</strong> ขึ้นไปตามแนวลุ่มแม่น้ำไทกริส-ยูเฟรทีส เลี้ยวโค้งลงมาตามชายฝั่งทะเลเมดิเตอร์เรเนียน (ฟินิเชีย-ปาเลสไตน์) จนถึงลุ่มแม่น้ำไนล์ของอียิปต์
+            </p>
+            <div class="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800/60 text-xs space-y-1.5">
+              <div class="font-bold text-amber-900 dark:text-amber-200">🔍 ข้อสอบถามมองจากอวกาศ/ดาวเคราะห์:</div>
+              <p class="text-amber-800 dark:text-amber-300">
+                หากมองภาพถ่ายดาวเทียมหรือมองจากอวกาศ จะเห็นแนวพื้นที่สีเขียวที่อุดมสมบูรณ์โค้งเป็นรูปเสี้ยวพระจันทร์ โอบล้อมทะเลทรายซีเรียอันแห้งแล้ง ซึ่งเป็นจุดเริ่มต้นของเกษตรกรรมและการตั้งถิ่นฐานแห่งแรกของมนุษยชาติ
+              </p>
+            </div>
+            <p>
+              <strong>แม่น้ำสำคัญ 2 สาย:</strong> <strong>แม่น้ำไทกริส (Tigris)</strong> และ <strong>แม่น้ำยูเฟรทีส (Euphrates)</strong> (คำว่า "เมโสโปเตเมีย" ในภาษากรีกแปลว่า <em>ดินแดนระหว่างแม่น้ำสองสาย</em>)
+            </p>
+            <p>
+              <strong>ลักษณะทางธรรมชาติ:</strong> น้ำท่วมไหลเชี่ยวและ <em>คาดเดาไม่ได้</em> แตกต่างจากแม่น้ำไนล์ ทำให้ชาวเมโสโปเตเมียรู้สึกว่าธรรมชาติและเทพเจ้าโหดร้าย เอาแน่เอานอนไม่ได้ และไม่มีพรมแดนธรรมชาติปิดกั้น จึงมีการรุกรานและผลัดเปลี่ยนอำนาจอยู่ตลอดเวลา
+            </p>
+          </div>
+        </div>
+
+        <!-- 1.2 Sumerians, Cuneiform & Ziggurat -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+          <div class="flex items-center space-x-3">
+            <span class="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xl">🏛️</span>
+            <div>
+              <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">อักษรคูนิฟอร์ม & สถาปัตยกรรมซิกกูแรต</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">มรดกทางอารยธรรมสุเมเรียน</p>
+            </div>
+          </div>
+          <div class="text-sm text-slate-600 dark:text-slate-300 space-y-3 leading-relaxed">
+            <div class="border-l-4 border-amber-500 pl-3">
+              <h4 class="font-display font-bold text-slate-900 dark:text-white">1. อักษรคูนิฟอร์ม (Cuneiform / อักษรรูปลิ่ม)</h4>
+              <p class="text-xs mt-1 text-slate-500 dark:text-slate-400">
+                • <strong>ผู้คิดค้น:</strong> ชาวสุเมเรียน (Sumerians)<br>
+                • <strong>วิธีการเขียน:</strong> ใช้ก้านอ้อหรือเหล็กแหลม (Stylus) กดลงบนแผ่นดินเหนียวเปียกให้เกิดรอยลิ่ม แล้วนำไปตากแดดหรือเผาไฟ<br>
+                • <strong>ความสำคัญ:</strong> ถือเป็นจุดเริ่มต้นของ <em>"ยุคประวัติศาสตร์"</em> ของโลกตะวันตก
+              </p>
+            </div>
+            <div class="border-l-4 border-amber-500 pl-3">
+              <h4 class="font-display font-bold text-slate-900 dark:text-white">2. ซิกกูแรต (Ziggurat)</h4>
+              <p class="text-xs mt-1 text-slate-500 dark:text-slate-400">
+                • <strong>รูปร่างลักษณะ:</strong> วิหารทรงพีระมิดขั้นบันไดขนาดใหญ่ สร้างด้วยอิฐดินดิบตากแห้ง ด้านบนสุดมีวิหารบูชาเทพเจ้า<br>
+                • <strong>สร้างขึ้นเพื่อ:</strong> เป็นที่สถิตของเทพเจ้าประจำนครรัฐ เป็นศูนย์กลางการปกครอง บันทึกภาษี และเก็บเสบียง<br>
+                • <strong>สะท้อนสังคม:</strong> สังคมที่ศาสนากับการเมืองผูกติดกัน (Theocracy) กษัตริย์ทำหน้าที่เสมือนตัวแทนหรือผู้รับใช้ของเทพเจ้า
+              </p>
+            </div>
+            <div class="border-l-4 border-amber-500 pl-3">
+              <h4 class="font-display font-bold text-slate-900 dark:text-white">3. สิ่งมหัศจรรย์ของโลกในยุคเมโสโปเตเมีย</h4>
+              <p class="text-xs mt-1 text-slate-500 dark:text-slate-400">
+                • <strong>สวนลอยแห่งบาบิโลน (Hanging Gardens of Babylon):</strong> 1 ใน 7 สิ่งมหัศจรรย์ของโลกยุคโบราณ สร้างโดย <em>กษัตริย์เนบูคัดเนสซาร์ที่ 2</em> แห่งอาณาจักรบาบิโลเนียใหม่ (คาลเดียน) ให้แก่มเหสีชาวมีดส์
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.3 Code of Hammurabi (Full Breakdown) -->
+      <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+        <div class="flex items-center space-x-3">
+          <span class="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xl">⚖️</span>
+          <div>
+            <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">ประมวลกฎหมายฮัมมูราบี (Code of Hammurabi)</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">อารยธรรมบาบิโลเนียเก่า (Old Babylonia / อามอไรต์)</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700">
+            <h4 class="font-display font-bold text-slate-900 dark:text-white mb-1.5 text-amber-600 dark:text-amber-400">หลักการ "ตาต่อตา ฟันต่อฟัน"</h4>
+            <p class="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+              (Lex Talionis) คือหลักการลงโทษแบบทดแทนความผิด ผู้กระทำผิดต้องได้รับผลร้ายตอบแทนเท่าเทียมกับความเสียหายที่ตนก่อ เช่น ใครทำให้คนอื่นตาบอด ต้องถูกทำให้ตาบอดเช่นกัน
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700">
+            <h4 class="font-display font-bold text-slate-900 dark:text-white mb-1.5 text-amber-600 dark:text-amber-400">สะท้อนโครงสร้างชนชั้น</h4>
+            <p class="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+              <strong>ข้อสอบเน้นย้ำ:</strong> กฎหมายไม่ได้บังคับเท่าเทียมกันทุกคน! สังคมแบ่งเป็น 3 ชนชั้น: ขุนนาง/เสรีชน, สามัญชน, และทาส หากขุนนางทำร้ายทาส จะไม่ต้องตาบอด แต่จ่ายเงินชดใช้เพียงกึ่งหนึ่งของมูลค่าทาส
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700">
+            <h4 class="font-display font-bold text-slate-900 dark:text-white mb-1.5 text-amber-600 dark:text-amber-400">สะท้อนสภาพเศรษฐกิจและสังคม</h4>
+            <p class="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+              สะท้อนการคุ้มครองทรัพย์สิน สัญญายืมเงิน การค้าขาย ชลประทาน ความรับผิดชอบในวิชาชีพ (เช่น ถ้าช่างสร้างบ้านแล้วบ้านถล่มทับลูกเจ้าของบ้านตาย ลูกของช่างต้องถูกประหารชีวิต)
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive Hammurabi Court Simulator -->
+        <div class="p-4 rounded-xl bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/50 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-sm text-amber-900 dark:text-amber-200">🔨 จำลองคำพิพากษาตามกฎหมายฮัมมูราบี (ทดลองเล่น)</span>
+            <span class="text-xs text-amber-700 dark:text-amber-400">เลือกเคสเพื่อดูผลลัพธ์</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-display">
+            <button onclick="runHammurabiCase(1)" class="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700 hover:bg-amber-100 dark:hover:bg-amber-900 text-left transition">
+              1. ชนชั้นขุนนาง ชกฟันขุนนางด้วยกันหัก
+            </button>
+            <button onclick="runHammurabiCase(2)" class="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700 hover:bg-amber-100 dark:hover:bg-amber-900 text-left transition">
+              2. ชนชั้นขุนนาง ตบทาสจนตาบอด
+            </button>
+            <button onclick="runHammurabiCase(3)" class="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700 hover:bg-amber-100 dark:hover:bg-amber-900 text-left transition">
+              3. ช่างก่อสร้างบ้านพัง ทับลูกเจ้าของบ้านตาย
+            </button>
+          </div>
+          <div id="hammurabi-result" class="p-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300">
+            👈 คลิกเลือกกรณีศึกษาด้านบนเพื่อดูบทลงโทษตามจารึกหินบะซอลต์
+          </div>
+        </div>
+      </div>
+
+      <!-- Ancient Greece Deep Dive -->
+      <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+        <div class="flex items-center space-x-3">
+          <span class="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xl">⚔️</span>
+          <div>
+            <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">อารยธรรมกรีกโบราณ (Ancient Greece)</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">ชาวเฮลลีน (Hellenes), นครรัฐ และสงครามประวัติศาสตร์</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm">
+          <!-- Geography & Hellenes -->
+          <div class="space-y-3">
+            <h4 class="font-display font-bold text-slate-900 dark:text-white text-sm border-b pb-1 dark:border-slate-700">ภูมิประเทศ & ชาวเฮลลีน</h4>
+            <ul class="space-y-2 text-slate-600 dark:text-slate-300 list-disc list-inside">
+              <li><strong>ที่ตั้ง:</strong> คาบสมุทรบอลข่านและหมู่เกาะในทะเลอีเจียน (Aegean Sea)</li>
+              <li><strong>ภูมิประเทศ:</strong> เต็มไปด้วยเทือกเขาสูงสลับซับซ้อน ดินไม่อุดมสมบูรณ์ ทำให้ <em>ไม่สามารถรวมศูนย์อำนาจเป็นอาณาจักรเดียวได้</em> จึงเกิดเป็นนครรัฐอิสระ (Polis) ต่างคนต่างมีอำนาจอธิปไตย</li>
+              <li><strong>ชาวเฮลลีน (Hellenes):</strong> ชนเผ่ากรีกที่เรียกดินแดนตนเองว่า <em>เฮลลัส (Hellas)</em> มีความผูกพันทางภาษา วรรณกรรมโฮเมอร์ (Iliad & Odyssey) และการแข่งขันกีฬาโอลิมปิกเพื่อบูชาเทพซุส (Zeus) ณ เขาโอลิมปัส</li>
+            </ul>
+          </div>
+
+          <!-- Athens vs Sparta Comparison Table -->
+          <div class="space-y-3">
+            <h4 class="font-display font-bold text-slate-900 dark:text-white text-sm border-b pb-1 dark:border-slate-700">เปรียบเทียบ เอเธนส์ VS สปาร์ตา</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border border-slate-200 dark:border-slate-700 rounded-lg">
+                <thead class="bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300">
+                  <tr>
+                    <th class="p-2 border-b dark:border-slate-700">หัวข้อ</th>
+                    <th class="p-2 border-b dark:border-slate-700 text-indigo-600 dark:text-indigo-400">เอเธนส์ (Athens)</th>
+                    <th class="p-2 border-b dark:border-slate-700 text-rose-600 dark:text-rose-400">สปาร์ตา (Sparta)</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-slate-600 dark:text-slate-300">
+                  <tr>
+                    <td class="p-2 font-medium">การปกครอง</td>
+                    <td class="p-2">ประชาธิปไตยทางตรง (Direct Democracy) สภาห้าร้อย/สภาราษฎร</td>
+                    <td class="p-2">คณาธิปไตย/ทหารนิยม (Militarism) กษัตริย์ 2 พระองค์ + สภาเอฟอร์</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-medium">จุดเด่นสังคม</td>
+                    <td class="p-2">เสรีภาพ ปรัชญา ศิลปะ การค้าทางทะเล วิหารพาร์เธนอน</td>
+                    <td class="p-2">การฝึกวินัยทหารเข้มงวด (Agoge) แยกเด็กชายเข้าค่ายฝึกแต่ 7 ขวบ</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-medium">แรงขับเคลื่อน</td>
+                    <td class="p-2">ผู้นำ: โซลอน, คลีสธีนีส, เพริคลิส (ยุคทอง)</td>
+                    <td class="p-2">ควบคุมชนชั้นทาส <strong>"เฮล็อต" (Helots)</strong> ที่มีจำนวนมากกว่าเพื่อไม่ให้กบฏ</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wars Timeline & Alexander -->
+        <div class="space-y-3 pt-2">
+          <h4 class="font-display font-bold text-slate-900 dark:text-white text-sm">ลำดับเหตุการณ์ & สงครามสำคัญ (เรียงตามลำดับเวลา)</h4>
+          <div class="relative border-l-2 border-amber-400 dark:border-amber-600 ml-4 space-y-5 py-2">
+            <!-- Event 1 -->
+            <div class="relative pl-6">
+              <div class="absolute -left-2 top-1.5 w-4 h-4 rounded-full bg-amber-500 border-2 border-white dark:border-slate-900"></div>
+              <h5 class="font-display font-bold text-xs sm:text-sm text-slate-900 dark:text-white">1. สงครามเปอร์เซีย (Greco-Persian Wars, 499–449 ปีก่อน ค.ศ.)</h5>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                จักรวรรดิเปอร์เซียรุกรานนครรัฐกรีก นครรัฐกรีก (เอเธนส์ + สปาร์ตา) รวมพลังกันต่อสู้ ชนะที่ยุทธการมาราธอน, ยุทธการซาลามิส (ทางเรือ) ส่วนสปาร์ตานำโดยกษัตริย์ลีโอนิดาสรบอย่างกล้าหาญที่ช่องเขาเทอร์โมพีลี (Thermopylae) &rarr; กรีกได้รับชัยชนะ
+              </p>
+            </div>
+            <!-- Event 2 -->
+            <div class="relative pl-6">
+              <div class="absolute -left-2 top-1.5 w-4 h-4 rounded-full bg-amber-500 border-2 border-white dark:border-slate-900"></div>
+              <h5 class="font-display font-bold text-xs sm:text-sm text-slate-900 dark:text-white">2. สงครามเพโลพอนนีเซียน (Peloponnesian War, 431–404 ปีก่อน ค.ศ.)</h5>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                ความขัดแย้งระหว่างกรีกด้วยกันเอง: <strong>กลุ่มสันนิบาตเดเลียน (นำโดยเอเธนส์)</strong> VS <strong>กลุ่มสันนิบาตเพโลพอนนีเซียน (นำโดยสปาร์ตา)</strong> &rarr; สปาร์ตาชนะ แต่ทำให้นครรัฐกรีกทั้งหมดอ่อนแอลงอย่างรุนแรง
+              </p>
+            </div>
+            <!-- Event 3 -->
+            <div class="relative pl-6">
+              <div class="absolute -left-2 top-1.5 w-4 h-4 rounded-full bg-amber-500 border-2 border-white dark:border-slate-900"></div>
+              <h5 class="font-display font-bold text-xs sm:text-sm text-slate-900 dark:text-white">3. ยุคพระเจ้าอเล็กซานเดอร์มหาราช & เฮลเลนิสติก (Hellenistic Era)</h5>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                พระเจ้าฟิลิปที่ 2 และ <strong>พระเจ้าอเล็กซานเดอร์มหาราช (Alexander the Great)</strong> แห่งมาซิโดเนีย รวมกรีกและแผ่ขยายจักรวรรดิไปจนถึงอียิปต์ เปอร์เซีย และอินเดีย ผสมผสานศิลปวิทยาการกรีกเข้ากับวัฒนธรรมตะวันออกกลายเป็น <em>"อารยธรรมเฮลเลนิสติก"</em>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SECTION: 2. ภาษาไทย: การอ่านตีความ & ครุ-ลหุ -->
+    <!-- ============================================================== -->
+    <section id="tab-thai" class="tab-content hidden space-y-8">
+      <!-- Section Header -->
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">หมวดที่ 2 • Thai Language & Prosody</span>
+          <h2 class="text-2xl sm:text-3xl font-bold font-display text-slate-900 dark:text-white">การอ่านวิเคราะห์ตีความ & ระบบตรวจครุ-ลหุ</h2>
+        </div>
+        <div class="flex items-center space-x-2 text-xs">
+          <span class="px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-800 dark:text-indigo-300 font-medium">แยกพยางค์อัตโนมัติ</span>
+        </div>
+      </div>
+
+      <!-- Reading Comprehension Methodology -->
+      <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-5">
+        <div class="flex items-center space-x-3">
+          <span class="p-2.5 rounded-xl bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xl">📖</span>
+          <div>
+            <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">ทฤษฎีการอ่าน 3 ระดับ: แปลความ • ตีความ • ขยายความ</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">เทคนิคตัดชอยส์และดึงหลักฐานจากบทความ</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center space-x-2 mb-2">
+              <span class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-600 flex items-center justify-center font-bold text-xs">1</span>
+              <h4 class="font-display font-bold text-slate-900 dark:text-white">การแปลความ (Direct Meaning)</h4>
+            </div>
+            <p class="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+              เข้าใจความหมายตรงตามตัวอักษร คำศัพท์ สำนวน หรือข้อเท็จจริงที่ระบุไว้ชัดเจนในข้อความ ไม่ต้องคิดซับซ้อน เช่น แปลคำศัพท์ หรือแปลงรูปประโยคเป็นภาษาธรรมดา
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center space-x-2 mb-2">
+              <span class="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-600 flex items-center justify-center font-bold text-xs">2</span>
+              <h4 class="font-display font-bold text-slate-900 dark:text-white">การตีความ (Interpretation)</h4>
+            </div>
+            <p class="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+              ค้นหาความหมายแฝง นัยยะ เจตนา น้ำเสียง จุดประสงค์ หรือแนวคิดหลักที่ผู้เขียนซ่อนไว้ใต้ข้อความ ต้องอาศัยบริบทและการสังเคราะห์
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center space-x-2 mb-2">
+              <span class="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-600 flex items-center justify-center font-bold text-xs">3</span>
+              <h4 class="font-display font-bold text-slate-900 dark:text-white">การขยายความ (Elaboration)</h4>
+            </div>
+            <p class="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
+              นำข้อมูลหรือสาระสำคัญจากข้อความมาอธิบายเพิ่มเติม ยกตัวอย่าง เชื่อมโยงกับเหตุการณ์อื่น หรือให้เหตุผลสนับสนุนให้ผู้อ่านเข้าใจกระจ่างยิ่งขึ้น
+            </p>
+          </div>
+        </div>
+
+        <!-- 5-Step Formula Callout -->
+        <div class="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 text-xs text-indigo-950 dark:text-indigo-200">
+          <div class="font-bold text-sm mb-1 font-display">⚡ สูตรคิดพิชิตข้อสอบภาษาไทย (อย่าตอบตามความรู้สึก!):</div>
+          <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-center mt-2 font-display">
+            <div class="p-2 rounded bg-white dark:bg-slate-800 border border-indigo-200 dark:border-slate-700">1. ข้อความเดิม</div>
+            <div class="p-2 rounded bg-white dark:bg-slate-800 border border-indigo-200 dark:border-slate-700">2. ผู้เขียนพูดอะไร</div>
+            <div class="p-2 rounded bg-white dark:bg-slate-800 border border-indigo-200 dark:border-slate-700">3. เจตนา/ต้องการสื่ออะไร</div>
+            <div class="p-2 rounded bg-white dark:bg-slate-800 border border-indigo-200 dark:border-slate-700">4. หลักฐานอยู่ตรงไหน</div>
+            <div class="p-2 rounded bg-indigo-600 text-white font-bold">5. เลือกข้อที่มีหลักฐานรองรับ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fact vs Opinion (ข้อเท็จจริง VS ข้อคิดเห็น) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+          <h4 class="font-display font-bold text-emerald-600 dark:text-emerald-400 text-base flex items-center space-x-2">
+            <span>✅ ข้อเท็จจริง (Fact)</span>
+          </h4>
+          <ul class="text-xs text-slate-600 dark:text-slate-300 space-y-1.5 list-disc list-inside">
+            <li>มีความเป็นไปได้ มีอยู่จริงตามธรรมชาติ</li>
+            <li>มีหลักฐาน ข้อมูลเชิงประจักษ์ สถิติ หรือวิทยาศาสตร์รองรับ</li>
+            <li>มีความสมจริงและสามารถพิสูจน์ความถูกต้องได้</li>
+            <li><em>ตัวอย่าง:</em> ประมวลกฎหมายฮัมมูราบีจารึกอยู่บนแท่งหินบะซอลต์สีดำ</li>
+          </ul>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+          <h4 class="font-display font-bold text-amber-600 dark:text-amber-400 text-base flex items-center space-x-2">
+            <span>💡 ข้อคิดเห็น (Opinion)</span>
+          </h4>
+          <ul class="text-xs text-slate-600 dark:text-slate-300 space-y-1.5 list-disc list-inside">
+            <li>เป็นการแสดงความรู้สึก การคาดเดา หรือข้อสันนิษฐาน</li>
+            <li>เป็นการเปรียบเทียบหรือตัดสินคุณค่า (ดี, เลว, สวย, น่าอยู่)</li>
+            <li>มักมีคำว่า <strong>"น่าจะ", "ควรจะ", "คงจะ", "อาจจะ", "ที่สุด"</strong></li>
+            <li><em>ตัวอย่าง:</em> อารยธรรมกรีกมีความงดงามและน่าอยู่มากกว่าอารยธรรมอื่นใด</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Krut-Lahu Theory & Interactive Syllable Highlighter -->
+      <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+        <div class="flex items-center space-x-3">
+          <span class="p-2.5 rounded-xl bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 text-xl">✍️</span>
+          <div>
+            <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">กฎเกณฑ์ ครุ–ลหุ & ระบบตรวจสอบพยางค์อัจฉริยะ</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">คำประพันธ์ที่บังคับครุ-ลหุ = "ฉันท์" เท่านั้น!</p>
+          </div>
+        </div>
+
+        <!-- Rules Table -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+          <div class="p-4 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60">
+            <h4 class="font-display font-bold text-red-900 dark:text-red-200 flex items-center space-x-2">
+              <span class="px-2 py-0.5 rounded bg-red-200 dark:bg-red-800 text-red-900 dark:text-red-100 font-bold">ครุ ( ั )</span>
+              <span>คำเสียงหนัก</span>
+            </h4>
+            <ul class="mt-2 space-y-1.5 text-red-950 dark:text-red-300 text-xs">
+              <li>1. ทุกพยางค์ที่ <strong>มีตัวสะกด</strong> ในทุกมาตรา (เช่น คน, เดิน, <strong>พักตร์</strong>, สัท)</li>
+              <li>2. ไม่มีตัวสะกด แต่ประสมด้วย <strong>สระเสียงยาว</strong> ในแม่ ก กา (เช่น กา, ตา, มือ, โต, ไป)</li>
+              <li>3. สระเกิน 4 ตัว: <strong>อำ ไอ ใอ เอา</strong> (เพราะมีเสียงสะกด -ม, -ย, -ว แฝงอยู่)</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60">
+            <h4 class="font-display font-bold text-blue-900 dark:text-blue-200 flex items-center space-x-2">
+              <span class="px-2 py-0.5 rounded bg-blue-200 dark:bg-blue-800 text-blue-900 dark:text-blue-100 font-bold">ลหุ ( ุ )</span>
+              <span>คำเสียงเบา</span>
+            </h4>
+            <ul class="mt-2 space-y-1.5 text-blue-950 dark:text-blue-300 text-xs">
+              <li>1. คำที่ <strong>ไม่มีตัวสะกด</strong> และประสม <strong>สระเสียงสั้น</strong> ในแม่ ก กา (เช่น จะ, ติ, ปุ, เกะ, ดุ)</li>
+              <li>2. พยัญชนะโดดที่เปล่งเสียง อะ (เช่น <strong>ก็, บ่, ณ, ธ</strong>)</li>
+              <li>3. <em>คำที่มีตัวการันต์</em> หากไม่มีตัวสะกดและสระสั้น ก็นับเป็นลหุ</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Interactive Syllable Breakdown Tool -->
+        <div class="p-5 rounded-2xl bg-slate-900 text-white shadow-xl space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <h4 class="font-display font-bold text-amber-400 text-sm sm:text-base flex items-center space-x-2">
+                <span>🎯 ระบบวิเคราะห์แยกพยางค์ ตรวจครุ-ลหุ</span>
+              </h4>
+              <p class="text-xs text-slate-400">พิมพ์คำอ่านหรือกดตัวอย่างตามแนวข้อสอบเพื่อแยกพยางค์และตรวจสอบทันที</p>
+            </div>
+            <!-- Preset Buttons -->
+            <div class="flex flex-wrap gap-1.5 text-xs font-display">
+              <button onclick="setSampleChanda('วรพักตร์จะหมดจะหมอง')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">ข้อสอบ: วรพักตร์จะหมดจะหมอง</button>
+              <button onclick="setSampleChanda('สุเทษณ์สุรางค์')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">สุเทษณ์สุรางค์</button>
+              <button onclick="setSampleChanda('อ้าอรุณแอร่มระเรื่อรุจี')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">อ้าอรุณแอร่มระเรื่อรุจี</button>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <input id="syllable-input" type="text" value="วรพักตร์จะหมดจะหมอง" placeholder="พิมพ์คำหรือประโยคที่ต้องการตรวจ..." class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 text-sm">
+            <button onclick="analyzeSyllables()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-display font-bold text-sm whitespace-nowrap shadow transition">
+              ตรวจทันที
+            </button>
+          </div>
+
+          <!-- Syllable Output Display -->
+          <div id="syllable-output" class="pt-2">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SECTION: 3. มัทนะพาธา (MATTANAPHATHA) -->
+    <!-- ============================================================== -->
+    <section id="tab-mattan" class="tab-content hidden space-y-8">
+      <!-- Section Header -->
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400">หมวดที่ 3 • Masterpiece Literature</span>
+          <h2 class="text-2xl sm:text-3xl font-bold font-display text-slate-900 dark:text-white">มัทนะพาธา (ตำนานแห่งดอกกุหลาบ)</h2>
+        </div>
+        <div class="flex items-center space-x-2 text-xs">
+          <span class="px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 font-medium">ยอดบทละครพูดคำฉันท์</span>
+        </div>
+      </div>
+
+      <!-- Overview Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs sm:text-sm">
+        <div class="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+          <span class="text-xs text-slate-400 font-medium">ความหมายชื่อเรื่อง</span>
+          <h4 class="font-display font-bold text-slate-900 dark:text-white text-base mt-1">มทน + พาธา</h4>
+          <p class="text-slate-600 dark:text-slate-300 text-xs mt-1">
+            "ความเจ็บปวดหรือความเดือดร้อนอันเกิดจากความรัก"
+          </p>
+        </div>
+        <div class="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+          <span class="text-xs text-slate-400 font-medium">พระราชนิพนธ์โดย</span>
+          <h4 class="font-display font-bold text-slate-900 dark:text-white text-base mt-1">รัชกาลที่ 6</h4>
+          <p class="text-slate-600 dark:text-slate-300 text-xs mt-1">
+            พระบาทสมเด็จพระมงกุฎเกล้าเจ้าอยู่หัว ทรงแต่งเมื่อ พ.ศ. 2466
+          </p>
+        </div>
+        <div class="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+          <span class="text-xs text-slate-400 font-medium">การยกย่องทางวรรณคดี</span>
+          <h4 class="font-display font-bold text-slate-900 dark:text-white text-base mt-1">วรรณคดีสโมสร</h4>
+          <p class="text-slate-600 dark:text-slate-300 text-xs mt-1">
+            ยกย่องให้เป็น <strong>"ยอดของบทละครพูดคำฉันท์"</strong>
+          </p>
+        </div>
+        <div class="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+          <span class="text-xs text-slate-400 font-medium">รูปแบบคำประพันธ์</span>
+          <h4 class="font-display font-bold text-slate-900 dark:text-white text-base mt-1">ฉันท์ ๒๑ & กาพย์ ๓</h4>
+          <p class="text-slate-600 dark:text-slate-300 text-xs mt-1">
+            กาพย์ยานี ๑๑, กาพย์ฉบัง ๑๖, กาพย์สุรางคนางค์ ๒๘
+          </p>
+        </div>
+      </div>
+
+      <!-- Character Map (แผนผังตัวละครวิเคราะห์เจาะลึก) -->
+      <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">Character Map: วิเคราะห์ตัวละครตามแนวข้อสอบ</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">สถานะ นิสัย ความสัมพันธ์ และจุดชี้ขาดในเรื่อง</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Mathana -->
+          <div class="p-4 rounded-xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/60 space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="font-display font-bold text-rose-700 dark:text-rose-300 text-base">นางมัทนา</h4>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-rose-200 dark:bg-rose-900 text-rose-800 dark:text-rose-200 font-semibold">นางเอก</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>ลักษณะนิสัย:</strong> มีความรักมั่นคง ซื่อสัตย์ ไม่โลภในลาภยศอำนาจ ยึดมั่นในเกียรติ<br>
+              • <strong>ความรัก:</strong> ปฏิเสธสุเทษณ์เพราะไม่ได้รักจากใจ รักท้าวชัยเสนอย่างสุดหัวใจ<br>
+              • <strong>ชะตากรรม:</strong> ถูกสาปเป็นดอกกุพชะกะ (กุหลาบ) ลงมาสู่โลกมนุษย์
+            </p>
+          </div>
+
+          <!-- Suthep -->
+          <div class="p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="font-display font-bold text-amber-700 dark:text-amber-300 text-base">สุเทษณ์เทพบุตร</h4>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-amber-200 dark:bg-amber-900 text-amber-800 dark:text-amber-200 font-semibold">เทพสวรรค์</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>ลักษณะนิสัย:</strong> เอาแต่ใจตนเอง ลุ่มหลง เจ้าอารมณ์ ใช้อำนาจเป็นใหญ่<br>
+              • <strong>ความรัก:</strong> รักแบบเห็นแก่ตัว ต้องการครอบครอง แม้ต้องใช้มนต์สะกด<br>
+              • <strong>การกระทำ:</strong> เมื่อไม่ได้ดั่งใจจึงสาปมัทนา และในตอนจบสาปให้นางเป็นกุหลาบตลอดกาล
+            </p>
+          </div>
+
+          <!-- Chayasen -->
+          <div class="p-4 rounded-xl bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-900/60 space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="font-display font-bold text-indigo-700 dark:text-indigo-300 text-base">ท้าวชัยเสน</h4>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-200 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 font-semibold">กษัตริย์</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>เมืองที่ปกครอง:</strong> กษัตริย์แห่งเมือง <strong>"หัสตินาปุระ"</strong><br>
+              • <strong>ข้อสอบชอบออก:</strong> มีข้อเสียคือ <strong>"หูเบา เชื่อคนง่าย ขาดวิจารณญาณ"</strong> หลงเชื่อกลอุบายพระนางจัณฑีจนสั่งประหารมัทนา<br>
+              • <strong>ตอนจบ:</strong> รู้ความจริงแต่สายเกินไป จึงนำต้นกุหลาบกลับหัสตินาปุระ
+            </p>
+          </div>
+
+          <!-- Mayawin -->
+          <div class="p-4 rounded-xl bg-purple-50/60 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-900/60 space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="font-display font-bold text-purple-700 dark:text-purple-300 text-base">มายาวิน</h4>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-purple-200 dark:bg-purple-900 text-purple-800 dark:text-purple-200 font-semibold">วิทยาธร</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              • <strong>สถานะ/ตำแหน่ง:</strong> เป็น <strong>วิทยาธร</strong> (ผู้มีเวทมนตร์คาถา)<br>
+              • <strong>บทบาท:</strong> ใช้มนต์สะกดมัทนามาเข้าเฝ้าสุเทษณ์<br>
+              • <strong>ข้อสอบเน้นย้ำ:</strong> ประโยค <em>"นางยังงงงวย ตูข้าจะแก้บัดนี้"</em> คำว่า <strong>"ตูข้า" หมายถึง มายาวิน</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- Secondary Characters & Exam Vocabulary -->
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 text-xs space-y-2">
+          <div class="font-display font-bold text-slate-900 dark:text-white">ตัวละครสมทบ & คำศัพท์ที่ต้องจำ:</div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-slate-600 dark:text-slate-300">
+            <div>
+              <strong>พระนางจัณฑี:</strong> มเหสีเอกของชัยเสน ขี้อิจฉา ริษยา ใส่ร้ายว่ามัทนาเป็นชู้กับศุภางค์
+            </div>
+            <div>
+              <strong>ศุภางค์:</strong> ขุนพลเอกของชัยเสน ผู้จงรักภักดี ยอมพลีชีพในสนามรบเพื่อพิสูจน์ความบริสุทธิ์
+            </div>
+            <div>
+              <strong>ฤๅษีกาละทรรศิน:</strong> ผู้ดูแลมัทนาเหมือนลูกสาว ณ อาศรมในป่าหิมะวัน
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Famous Verses & Vocabulary Traps -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Poetry Highlight -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+          <h3 class="font-display font-bold text-base text-slate-900 dark:text-white flex items-center space-x-2">
+            <span>📜 บทกลอนสำคัญที่ออกข้อสอบเสมอ</span>
+          </h3>
+          <div class="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 font-serif text-rose-950 dark:text-rose-200 text-xs sm:text-sm leading-relaxed space-y-1">
+            <p>“ความรักเหมือนโรคา &nbsp;&nbsp; บรรดาลตาให้มืดมน”</p>
+            <p>“ไม่ยินและไม่ยล &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; อุปสัคคะใดใด”</p>
+            <p>“ความรักเหมือนโคถึก &nbsp; กำลังคึกผิขังไว้”</p>
+            <p>“ก็โลดจากคอกไป &nbsp;&nbsp;&nbsp;&nbsp; บยอมอยู่ ณ ที่ขัง...”</p>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400">
+            <strong>ใครกล่าว:</strong> พระนนทิ (กวีนำเสนอผ่านบทละคร) กล่าวเปรียบเทียบว่า <em>ความรักเหมือนโรคภัยที่ทำให้ตามืดบอด และเหมือนวัวตัวผู้ที่คึกคะนองไม่ยอมถูกขัง</em>
+          </p>
+        </div>
+
+        <!-- Vocabulary & Traps -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+          <h3 class="font-display font-bold text-base text-slate-900 dark:text-white flex items-center space-x-2">
+            <span>🎯 กับดักคำศัพท์ & ความเชื่อในเรื่อง</span>
+          </h3>
+          <ul class="text-xs text-slate-600 dark:text-slate-300 space-y-2">
+            <li>
+              <strong>ดอกไม้ในเรื่อง:</strong> คือ <strong>ดอกกุพฺชกะ (กุหลาบ)</strong> มายาวินบรรยายว่า เป็นดอกไม้ที่มีกลิ่นหอม มีหนามแหลมคม สวยงามแต่แฝงอันตราย
+            </li>
+            <li>
+              <strong>ข้อใดไม่ใช่เทวดา:</strong> ข้อสอบมักลวงด้วยชื่อกลุ่มอมนุษย์ เช่น <em>วิทยาธร, คนธรรพ์, ยักษ์, อสูร, นาค</em> (ซึ่งจัดเป็นกึ่งเทวดา/อมนุษย์ ไม่ใช่เทพเทวดาแท้แบบสุเทษณ์)
+            </li>
+            <li>
+              <strong>ความเชื่อที่ปรากฏ:</strong> ความเชื่อเรื่อง <strong>ชาติภพ และ เวรกรรม</strong> (กัมมุนา วัตตตี โลโก - สัตว์โลกย่อมเป็นไปตามกรรม) โดยสุเทษณ์และมัทนาต่างเคยมีกรรมผูกพันกันมาแต่อดีตชาติ
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SECTION: 4. ต้านทุจริตศึกษา (ANTI-CORRUPTION) -->
+    <!-- ============================================================== -->
+    <section id="tab-anticorrupt" class="tab-content hidden space-y-8">
+      <!-- Section Header -->
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">หมวดที่ 4 • Anti-Corruption Education</span>
+          <h2 class="text-2xl sm:text-3xl font-bold font-display text-slate-900 dark:text-white">หลักสูตรต้านทุจริตศึกษา</h2>
+        </div>
+        <div class="flex items-center space-x-2 text-xs">
+          <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-medium">ฐาน 2 VS ฐาน 10</span>
+        </div>
+      </div>
+
+      <!-- Base 2 vs Base 10 Deep Comparison -->
+      <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+        <div class="flex items-center space-x-3">
+          <span class="p-2.5 rounded-xl bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-xl">⚖️</span>
+          <div>
+            <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white">ระบบคิดฐาน 2 (Digital) VS ระบบคิดฐาน 10 (Analog)</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">หัวใจสำคัญของการแยกแยะผลประโยชน์ส่วนตนและประโยชน์ส่วนรวม</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm">
+          <!-- Base 2 (Digital) -->
+          <div class="p-5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 border-2 border-emerald-300 dark:border-emerald-700 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="font-display font-bold text-emerald-800 dark:text-emerald-300 text-base">ระบบคิดฐาน 2 (Digital Thinking: 0 กับ 1)</h4>
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-200 dark:bg-emerald-800 text-emerald-900 dark:text-emerald-100 font-bold">เป้าหมายที่ถูกต้อง</span>
+            </div>
+            <ul class="text-slate-700 dark:text-slate-300 space-y-2 text-xs leading-relaxed">
+              <li>• <strong>แนวคิด:</strong> มองสิ่งต่างๆ เพียง 2 ขั้ว คือ <em>"0 (ถูก/ประโยชน์ส่วนรวม)"</em> กับ <em>"1 (ผิด/ประโยชน์ส่วนตน)"</em></li>
+              <li>• <strong>การตัดสินใจ:</strong> สามารถแยกแยะประโยชน์ส่วนตนออกจากประโยชน์ส่วนรวมได้อย่าง <strong>เด็ดขาด ชัดเจน</strong></li>
+              <li>• <strong>คติประจำใจ:</strong> ผิดคือผิด ถูกคือถูก ห้ามนำมารวมกัน ไม่มีการหยวนๆ หรือเห็นแก่หน้าใคร</li>
+              <li>• <strong>ตัวอย่าง:</strong> นำรถหลวงมาใช้ในงานราชการเท่านั้น ไม่แวะรับส่งลูก หรือไม่ชาร์จไฟโทรศัพท์มือถือส่วนตัวด้วยปลั๊กหลวง</li>
+            </ul>
+          </div>
+
+          <!-- Base 10 (Analog) -->
+          <div class="p-5 rounded-2xl bg-red-50/80 dark:bg-red-950/40 border-2 border-red-300 dark:border-red-700 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="font-display font-bold text-red-800 dark:text-red-300 text-base">ระบบคิดฐาน 10 (Analog Thinking: 0 ถึง 9)</h4>
+              <span class="text-xs px-2 py-0.5 rounded bg-red-200 dark:bg-red-800 text-red-900 dark:text-red-100 font-bold">บ่อเกิดทุจริต</span>
+            </div>
+            <ul class="text-slate-700 dark:text-slate-300 space-y-2 text-xs leading-relaxed">
+              <li>• <strong>แนวคิด:</strong> มองสิ่งต่างๆ มีความเบลอ ปะปนกันระหว่างเลข 0 ถึง 9 (เทาๆ มีหลายเฉด)</li>
+              <li>• <strong>การตัดสินใจ:</strong> นำประโยชน์ส่วนตนและประโยชน์ส่วนรวมมา <strong>ปะปน คลุมเครือ</strong> อะลุ่มอล่วย</li>
+              <li>• <strong>คติประจำใจ:</strong> "นิดๆ หน่อยๆ ไม่เป็นไร", "ใครๆ เขาก็ทำกัน", "บุญคุณต้องตอบแทน"</li>
+              <li>• <strong>ตัวอย่าง:</strong> นำปากกา กระดาษหลวงกลับไปใช้ที่บ้าน อ้างว่าทำงานให้หลวงเหนื่อยแล้ว หรือฝากลูกหลานเข้าโรงเรียน</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Conflict of Interest (COI) -->
+        <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 space-y-3">
+          <h4 class="font-display font-bold text-slate-900 dark:text-white text-base">ผลประโยชน์ทับซ้อน (Conflict of Interests: COI) คืออะไร?</h4>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            คือ สถานการณ์หรือสภาวการณ์ที่เจ้าหน้าที่ของรัฐ บุคลากร หรือผู้มีอำนาจ <strong>มีผลประโยชน์ส่วนตนเข้ามาขัดแย้งหรือมีอิทธิพลต่อการตัดสินใจในการปฏิบัติหน้าที่ราชการเพื่อประโยชน์ส่วนรวม</strong> ทำให้การตัดสินใจนั้นสูญเสียความเที่ยงธรรม บิดเบือน หรือเอื้อประโยชน์แก่ตนเองและพวกพ้อง
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-2">
+            <div class="p-3 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <strong>1. การรับของขวัญ/สินบน:</strong> รับเงิน ของกำนัล หรือไปตีกอล์ฟฟรีจากบริษัทคู่สัญญา
+            </div>
+            <div class="p-3 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <strong>2. การจัดซื้อจัดจ้างพวกพ้อง:</strong> บริษัทของญาติเข้าร่วมประมูลงานโดยใช้ความสนิทสนม
+            </div>
+            <div class="p-3 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <strong>3. ข้อมูลภายใน (Insider):</strong> นำข้อมูลลับผังเมืองไปช้อนซื้อที่ดินก่อนประกาศโครงการ
+            </div>
+          </div>
+        </div>
+
+        <!-- Viral News Case Study -->
+        <div class="p-5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs sm:text-sm space-y-3">
+          <h4 class="font-display font-bold text-amber-900 dark:text-amber-200 flex items-center space-x-2">
+            <span>📰 วิเคราะห์กรณีศึกษาข่าวที่เป็นกระแสในสังคม</span>
+          </h4>
+          <p class="text-amber-950 dark:text-amber-300 leading-relaxed text-xs">
+            <strong>เคสกระแส:</strong> ผู้บริหารหน่วยงานรัฐนำ "รถยนต์ส่วนกลาง" ไปร่วมงานแต่งงานของญาติในวันหยุดเสาร์-อาทิตย์ โดยเบิกค่าน้ำมันจากงบหลวง และชี้แจงว่าแวะไปตรวจราชการด้วย<br>
+            <strong>การวิเคราะห์เชิงสอบ:</strong> การกระทำนี้จัดเป็น <em>การคิดแบบฐาน 10</em> ที่นำประโยชน์ส่วนตนและส่วนรวมมาปะปนกัน และถือเป็น <em>การใช้ทรัพย์สินของทางราชการเพื่อประโยชน์ส่วนตน (Misuse of state property)</em> ซึ่งเป็นรูปแบบหนึ่งของผลประโยชน์ทับซ้อนและผิดกฎหมาย ป.ป.ช.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SECTION: 5. คลังข้อสอบจริง (MOCK EXAM ENGINE) -->
+    <!-- ============================================================== -->
+    <section id="tab-exam" class="tab-content hidden space-y-8">
+      <!-- Section Header -->
+      <div class="border-b border-slate-200 dark:border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">ระบบจำลองการสอบ • Interactive Exam Simulator</span>
+          <h2 class="text-2xl sm:text-3xl font-bold font-display text-slate-900 dark:text-white">แบบทดสอบจำลองเสมือนจริง 3 วิชา</h2>
+        </div>
+        <div class="flex items-center space-x-3">
+          <span id="exam-timer" class="px-3 py-1.5 rounded-xl bg-slate-900 text-amber-400 font-mono font-bold text-sm shadow">
+            ⏱️ 20:00
+          </span>
+          <button onclick="resetExam()" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold">
+            🔄 เริ่มใหม่
+          </button>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex flex-wrap gap-2 text-xs font-display">
+        <button onclick="filterQuiz('all')" id="filter-all" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm">ทั้งหมด (ทุกวิชา)</button>
+        <button onclick="filterQuiz('history')" id="filter-history" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">📜 ประวัติศาสตร์สากล</button>
+        <button onclick="filterQuiz('thai')" id="filter-thai" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">🇹🇭 ภาษาไทย & ครุ-ลหุ</button>
+        <button onclick="filterQuiz('mattan')" id="filter-mattan" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">🌹 มัทนะพาธา</button>
+        <button onclick="filterQuiz('anticorrupt')" id="filter-anticorrupt" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">⚖️ ต้านทุจริต</button>
+      </div>
+
+      <!-- Quiz Questions Container -->
+      <div id="quiz-container" class="space-y-6">
+        <!-- Rendered by JavaScript -->
+      </div>
+
+      <!-- Quiz Score Summary Modal / Area -->
+      <div id="quiz-result-box" class="hidden p-6 rounded-2xl bg-gradient-to-tr from-indigo-900 to-purple-900 text-white text-center space-y-4 shadow-2xl">
+        <h3 class="text-2xl font-display font-bold">📊 ผลการทดสอบรวมของคุณ</h3>
+        <div id="quiz-score-display" class="text-4xl sm:text-5xl font-extrabold text-amber-400 font-display">
+          0 / 0
+        </div>
+        <p id="quiz-evaluation" class="text-sm text-slate-200 max-w-md mx-auto"></p>
+        <button onclick="switchTab('boss')" class="px-6 py-3 rounded-xl bg-rose-600 hover:bg-rose-500 font-display font-bold text-white shadow-lg shadow-rose-600/30">
+          ⚔️ ปลดล็อก FINAL BOSS ชี้ชะตา &rarr;
+        </button>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SECTION: 6. FINAL BOSS: THE ULTIMATE CHALLENGE -->
+    <!-- ============================================================== -->
+    <section id="tab-boss" class="tab-content hidden space-y-8">
+      <!-- Final Boss Header -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-rose-950 via-purple-950 to-slate-950 p-6 sm:p-10 border-2 border-rose-500/50 shadow-2xl text-white">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/30 text-xs font-bold mb-3">
+            <span>🔥 FINAL BOSS: ข้อสุดท้ายง่ายที่สุด แต่ห้ามตอบผิดเด็ดขาด!</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold font-display tracking-tight text-white mb-3">
+            จุดจบแห่งมัทนะพาธา & บทเรียนชี้ชะตา
+          </h2>
+          <p class="text-xs sm:text-sm text-rose-200/90 leading-relaxed mb-4">
+            นี่คือโจทย์สำคัญที่สุดที่ครูเน้นย้ำ! ห้ามสับสนเหตุการณ์ ห้ามตอบตามความรู้สึก และต้องวิเคราะห์ผลลัพธ์ของตัวละครให้แม่นยำ 100%
+          </p>
+        </div>
+      </div>
+
+      <!-- Boss Question Card -->
+      <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border-2 border-rose-400 dark:border-rose-600 shadow-xl space-y-6">
+        <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+          <span class="text-xs font-bold text-rose-600 dark:text-rose-400 tracking-wider uppercase font-display">คำถามชี้ชะตา • The Final Riddle</span>
+          <h3 class="text-xl sm:text-2xl font-bold font-display text-slate-900 dark:text-white mt-1">
+            "ในตอนจบของวรรณคดีเรื่อง มัทนะพาธา เกิดเหตุการณ์ใดขึ้น และสะท้อนผลลัพธ์ของตัวละครอย่างไร?"
+          </h3>
+        </div>
+
+        <div class="space-y-3 font-display text-xs sm:text-sm" id="boss-options">
+          <label onclick="handleBossChoice('A')" class="boss-label flex items-start p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-rose-400 dark:hover:border-rose-500 cursor-pointer transition">
+            <input type="radio" name="boss-opt" value="A" class="mt-1 mr-3 text-rose-600">
+            <div>
+              <span class="font-bold text-slate-900 dark:text-white">ก. ท้าวชัยเสนสังหารสุเทษณ์ได้สำเร็จ มัทนาจึงพ้นจากคำสาปและได้กลับไปครองเมืองหัสตินาปุระอย่างมีความสุข</span>
+              <p class="text-slate-500 dark:text-slate-400 text-xs font-sans mt-0.5">ชอยส์หลอกแบบ Happy Ending ซึ่งไม่ตรงกับวรรณคดีโศกนาฏกรรม</p>
+            </div>
+          </label>
+
+          <label onclick="handleBossChoice('B')" class="boss-label flex items-start p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-rose-400 dark:hover:border-rose-500 cursor-pointer transition">
+            <input type="radio" name="boss-opt" value="B" class="mt-1 mr-3 text-rose-600">
+            <div>
+              <span class="font-bold text-slate-900 dark:text-white">ข. มัทนายังคงยืนยันปฏิเสธความรักของสุเทษณ์ สุเทษณ์จึงโกรธและสาปให้นางกลายร่างเป็นดอกกุหลาบตลอดกาล ส่วนชัยเสนได้แต่นำต้นกุหลาบกลับไปปลูกในวัง</span>
+              <p class="text-slate-500 dark:text-slate-400 text-xs font-sans mt-0.5">พิจารณาข้อเท็จจริงตามพระราชนิพนธ์</p>
+            </div>
+          </label>
+
+          <label onclick="handleBossChoice('C')" class="boss-label flex items-start p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-rose-400 dark:hover:border-rose-500 cursor-pointer transition">
+            <input type="radio" name="boss-opt" value="C" class="mt-1 mr-3 text-rose-600">
+            <div>
+              <span class="font-bold text-slate-900 dark:text-white">ค. มัทนายอมตกลงรับรักสุเทษณ์เพื่อหนีความทุกข์ระทมบนโลกมนุษย์ แล้วเหาะกลับไปเสวยสุขบนสรวงสวรรค์</span>
+              <p class="text-slate-500 dark:text-slate-400 text-xs font-sans mt-0.5">ชอยส์หลอกที่ขัดต่อลักษณะนิสัยความรักมั่นคงและซื่อสัตย์ของมัทนา</p>
+            </div>
+          </label>
+
+          <label onclick="handleBossChoice('D')" class="boss-label flex items-start p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-rose-400 dark:hover:border-rose-500 cursor-pointer transition">
+            <input type="radio" name="boss-opt" value="D" class="mt-1 mr-3 text-rose-600">
+            <div>
+              <span class="font-bold text-slate-900 dark:text-white">ง. มายาวินทนความอยุติธรรมไม่ไหว จึงขโมยมนต์วิเศษช่วยถอนคำสาปให้มัทนากลายเป็นมนุษย์ตลอดกาล</span>
+              <p class="text-slate-500 dark:text-slate-400 text-xs font-sans mt-0.5">ชอยส์หลอกเรื่องบทบาทของวิทยาธรมายาวิน</p>
+            </div>
+          </label>
+        </div>
+
+        <div id="boss-feedback" class="hidden p-5 rounded-2xl text-xs sm:text-sm leading-relaxed"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500 dark:text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 space-y-2">
+      <p class="font-display font-medium text-slate-700 dark:text-slate-300">ระบบเตรียมสอบพิชิต 3 วิชา • ประวัติศาสตร์สากล | ภาษาไทย & มัทนะพาธา | ต้านทุจริตศึกษา</p>
+      <p>ออกแบบเนื้อหาเจาะลึกและรหัสการวิเคราะห์สมบูรณ์แบบเพื่อการทบทวนสอบระดับ ม.ปลาย</p>
+    </div>
+  </footer>
+
+  <!-- ============================================================== -->
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
+  <!-- ============================================================== -->
+  <script>
+    // --- 1. Dark Mode Toggle ---
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    // --- 2. Tab Navigation ---
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      const activeEl = document.getElementById('tab-' + tabId);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      // Update Nav Buttons
+      ['dashboard', 'history', 'thai', 'mattan', 'anticorrupt', 'exam', 'boss'].forEach(id => {
+        const btn = document.getElementById('nav-' + id);
+        if (btn) {
+          if (id === tabId) {
+            btn.classList.add('text-indigo-600', 'dark:text-indigo-400', 'font-bold');
+            btn.classList.remove('text-slate-600', 'dark:text-slate-300');
+          } else if (id !== 'boss') {
+            btn.classList.remove('text-indigo-600', 'dark:text-indigo-400', 'font-bold');
+            btn.classList.add('text-slate-600', 'dark:text-slate-300');
+          }
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --- 3. Hammurabi Simulator Logic ---
+    function runHammurabiCase(caseId) {
+      const box = document.getElementById('hammurabi-result');
+      if (caseId === 1) {
+        box.innerHTML = `
+          <div class="space-y-1.5">
+            <span class="font-bold text-amber-700 dark:text-amber-400">⚖️ คำพิพากษามาตรา 200:</span>
+            <p>“ถ้าเสรีชน/ขุนนาง ต่อยฟันของคนชั้นเสรีชนด้วยกันหัก <strong>ฟันของผู้นั้นจะต้องถูกต่อยให้หักเช่นเดียวกัน</strong>”</p>
+            <p class="text-slate-500 dark:text-slate-400 text-xs"><em>วิเคราะห์:</em> สะท้อนหลัก "ตาต่อตา ฟันต่อฟัน" อย่างสมบูรณ์แบบเมื่อกระทำต่อบุคคลในชนชั้นเดียวกัน</p>
+          </div>
+        `;
+      } else if (caseId === 2) {
+        box.innerHTML = `
+          <div class="space-y-1.5">
+            <span class="font-bold text-amber-700 dark:text-amber-400">⚖️ คำพิพากษามาตรา 199:</span>
+            <p>“ถ้าเสรีชนทำให้ตาของทาสผู้อื่นบอด หรือหักกระดูกของทาส <strong>เขาต้องจ่ายเงินชดใช้กึ่งหนึ่งของมูลค่าตัวทาสนั้นให้แก่เจ้าของทาส</strong>”</p>
+            <p class="text-slate-500 dark:text-slate-400 text-xs"><em>วิเคราะห์:</em> เสรีชนไม่ต้องตาบอด! สะท้อนความไม่เท่าเทียมทางชนชั้น และทาสถูกมองว่าเป็นเพียง "ทรัพย์สิน" ของนายทาส</p>
+          </div>
+        `;
+      } else if (caseId === 3) {
+        box.innerHTML = `
+          <div class="space-y-1.5">
+            <span class="font-bold text-amber-700 dark:text-amber-400">⚖️ คำพิพากษามาตรา 230:</span>
+            <p>“ถ้าช่างสร้างบ้านไม่มั่นคงจนบ้านพังทับ <strong>บุตรของเจ้าของบ้านถึงแก่ความตาย บุตรของนายช่างผู้นั้นจะต้องถูกประหารชีวิตให้ตายตกไปตามกัน</strong>”</p>
+            <p class="text-slate-500 dark:text-slate-400 text-xs"><em>วิเคราะห์:</em> สะท้อนความรับผิดชอบในวิชาชีพอันเด็ดขาดรุนแรงตามหลักตาต่อตา ฟันต่อฟัน</p>
+          </div>
+        `;
+      }
+    }
+
+    // --- 4. Interactive Syllable & Krut-Lahu Analyzer ---
+    // Pre-mapped phonological patterns for authentic Thai prosody inspection
+    const customRules = {
+      'วรพักตร์จะหมดจะหมอง': [
+        { syl: 'วะ', type: 'ลหุ', reason: 'สระสั้นในแม่ ก กา ไม่มีตัวสะกด' },
+        { syl: 'ระ', type: 'ลหุ', reason: 'สระสั้นในแม่ ก กา ไม่มีตัวสะกด' },
+        { syl: 'พัก', type: 'ครุ', reason: 'มีตัวสะกดมาตราแม่กก (ก)' },
+        { syl: 'จะ', type: 'ลหุ', reason: 'สระสั้นในแม่ ก กา ไม่มีตัวสะกด' },
+        { syl: 'หมด', type: 'ครุ', reason: 'มีตัวสะกดมาตราแม่กด (ด)' },
+        { syl: 'จะ', type: 'ลหุ', reason: 'สระสั้นในแม่ ก กา ไม่มีตัวสะกด' },
+        { syl: 'หมอง', type: 'ครุ', reason: 'มีตัวสะกดมาตราแม่กง (ง)' }
+      ],
+      'สุเทษณ์สุรางค์': [
+        { syl: 'สุ', type: 'ลหุ', reason: 'สระสั้นในแม่ ก กา' },
+        { syl: 'เทด', type: 'ครุ', reason: 'มีตัวสะกดมาตราแม่กด' },
+        { syl: 'สุ', type: 'ลหุ', reason: 'สระสั้นในแม่ ก กา' },
+        { syl: 'ราง', type: 'ครุ', reason: 'มีตัวสะกดมาตราแม่กง' }
+      ],
+      'อ้าอรุณแอร่มระเรื่อรุจี': [
+        { syl: 'อ้า', type: 'ครุ', reason: 'สระเสียงยาวในแม่ ก กา' },
+        { syl: 'อะ', type: 'ลหุ', reason: 'สระสั้นในแม่ ก กา' },
+        { syl: 'รุน', type: 'ครุ', reason: 'มีตัวสะกดมาตราแม่กน' },
+        { syl: 'แอะ', type: 'ลหุ', reason: 'สระสั้นในแม่ ก กา' },
+        { syl: 'แร่ม', type: 'ครุ', reason: 'มีตัวสะกดมาตราแม่กม' },
+        { syl: 'ระ', type: 'ลหุ', reason: 'สระสั้นในแม่ ก กา' },
+        { syl: 'เรื่อ', type: 'ครุ', reason: 'สระเสียงยาวในแม่ ก กา' },
+        { syl: 'รุ', type: 'ลหุ', reason: 'สระสั้นในแม่ ก กา' },
+        { syl: 'จี', type: 'ครุ', reason: 'สระเสียงยาวในแม่ ก กา' }
+      ]
+    };
+
+    function setSampleChanda(text) {
+      document.getElementById('syllable-input').value = text;
+      analyzeSyllables();
+    }
+
+    function analyzeSyllables() {
+      const input = document.getElementById('syllable-input').value.trim();
+      const output = document.getElementById('syllable-output');
+
+      if (!input) {
+        output.innerHTML = '<p class="text-xs text-rose-400">กรุณาพิมพ์คำหรือข้อความ</p>';
+        return;
+      }
+
+      let tokens = [];
+      if (customRules[input]) {
+        tokens = customRules[input];
+      } else {
+        // Simple heuristic tokenizer for custom Thai syllables
+        // Splitting vowels and consonants
+        tokens = [
+          { syl: input, type: 'ประมวลผล', reason: 'คำเฉพาะ (โปรดเทียบ: สระสั้นแม่ ก กา/ก็/บ่/ณ/ธ = ลหุ, อื่นๆ ที่มีตัวสะกด/สระยาว/อำไอใอเอา = ครุ)' }
+        ];
+      }
+
+      let html = `
+        <div class="space-y-4">
+          <div class="flex flex-wrap gap-2 items-center">
+      `;
+
+      let guruCount = 0;
+      let laghuCount = 0;
+
+      tokens.forEach(t => {
+        const isGuru = t.type === 'ครุ';
+        if (isGuru) guruCount++;
+        else if (t.type === 'ลหุ') laghuCount++;
+
+        const badgeClass = isGuru
+          ? 'bg-red-500/20 text-red-300 border border-red-500/40'
+          : 'bg-blue-500/20 text-blue-300 border border-blue-500/40';
+
+        html += `
+          <div class="flex flex-col items-center p-2 rounded-xl bg-slate-800/90 border border-slate-700 min-w-[70px]">
+            <span class="text-base font-bold text-white mb-1 font-display">${t.syl}</span>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full ${badgeClass}">
+              ${t.type} ${isGuru ? 'ั' : 'ุ'}
+            </span>
+          </div>
+        `;
+      });
+
+      html += `
+          </div>
+          <div class="p-3 rounded-xl bg-slate-800 border border-slate-700 text-xs space-y-1.5">
+            <div class="font-bold text-amber-400">ผลการนับพยางค์ฉันทลักษณ์:</div>
+            <p class="text-slate-300">
+              ข้อความนี้ประกอบด้วย <strong>${tokens.length} พยางค์</strong> &rarr;
+              <span class="text-red-400 font-bold">ครุ: ${guruCount} คำ</span> |
+              <span class="text-blue-400 font-bold">ลหุ: ${laghuCount} คำ</span>
+            </p>
+            <div class="text-[11px] text-slate-400 space-y-0.5 mt-2 border-t border-slate-700 pt-2">
+              <span class="font-semibold text-slate-300">เหตุผลประกอบการตรวจทีละคำ:</span>
+              ${tokens.map(t => `<div>• <strong>${t.syl}</strong> (${t.type}): ${t.reason}</div>`).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+      output.innerHTML = html;
+    }
+
+    // --- 5. Comprehensive Question Bank (30 High-Yield Questions) ---
+    const questions = [
+      // Category: History (Mesopotamia)
+      {
+        id: 1,
+        cat: 'history',
+        q: 'ดินแดนพระจันทร์เสี้ยวอันอุดมสมบูรณ์ (Fertile Crescent) ตั้งอยู่บริเวณใด และมีแม่น้ำสายสำคัญใดเป็นหัวใจหลัก?',
+        options: [
+          'ลุ่มแม่น้ำสินธุและแม่น้ำคงคา ในเอเชียใต้',
+          'ลุ่มแม่น้ำไนล์และทะเลแดง ในแอฟริกาเหนือ',
+          'ลุ่มแม่น้ำไทกริสและยูเฟรทีส แผ่ขยายจากอ่าวเปอร์เซียจรดทะเลเมดิเตอร์เรเนียน',
+          'ลุ่มแม่น้ำดานูบและไรน์ ในยุโรปกลาง'
+        ],
+        ans: 2,
+        exp: 'ดินแดนพระจันทร์เสี้ยว (Fertile Crescent) พาดผ่านลุ่มแม่น้ำไทกริสและยูเฟรทีส (เมโสโปเตเมีย) โค้งผ่านชายฝั่งเมดิเตอร์เรเนียนไปจนถึงอียิปต์'
+      },
+      {
+        id: 2,
+        cat: 'history',
+        q: 'ชนชาติใดเป็นผู้คิดค้น "อักษรคูนิฟอร์ม" (Cuneiform) ซึ่งถือเป็นจุดเริ่มต้นของยุคประวัติศาสตร์?',
+        options: [
+          'ชาวฟินิเชีย',
+          'ชาวสุเมเรียน (Sumerians)',
+          'ชาวบาบิโลเนีย',
+          'ชาวอัสซีเรียน'
+        ],
+        ans: 1,
+        exp: 'ชาวสุเมเรียนเป็นผู้คิดค้นอักษรรูปลิ่มหรือคูนิฟอร์ม โดยใช้ก้านอ้อกดลงบนแผ่นดินเหนียวเปียกแล้วตากแห้ง'
+      },
+      {
+        id: 3,
+        cat: 'history',
+        q: 'สถาปัตยกรรม "ซิกกูแรต" (Ziggurat) มีลักษณะเด่นและวัตถุประสงค์ในการสร้างเพื่อสิ่งใดเป็นหลัก?',
+        options: [
+          'สุสานทรงกรวยแหลมสำหรับฝังพระศพของกษัตริย์และราชวงศ์',
+          'ป้อมปราการทางทหารสร้างล้อมรอบเมืองเพื่อป้องกันข้าศึก',
+          'เทวสถานทรงพีระมิดขั้นบันได สร้างเพื่อเป็นที่สถิตและบูชาเทพเจ้าประจำนครรัฐ',
+          'ตลาดการค้ากลางเมืองสำหรับแลกเปลี่ยนสินค้าทางเรือ'
+        ],
+        ans: 2,
+        exp: 'ซิกกูแรตคือวิหารขั้นบันไดบูชาเทพเจ้าประจำเมืองของเมโสโปเตเมีย ไม่ใช่สุสาน (สุสานคือพีระมิดอียิปต์)'
+      },
+      {
+        id: 4,
+        cat: 'history',
+        q: 'ประมวลกฎหมายฮัมมูราบียึดถือหลัก "ตาต่อตา ฟันต่อฟัน" แต่ในทางปฏิบัติสะท้อนโครงสร้างสังคมเมโสโปเตเมียอย่างไร?',
+        options: [
+          'บังคับใช้กับประชาชนทุกคนอย่างเท่าเทียมกันโดยไม่เลือกชนชั้น',
+          'การลงโทษขึ้นอยู่กับชนชั้นทางสังคม หากทำร้ายทาสจะชดใช้เพียงค่าปรับกึ่งหนึ่งของมูลค่าทาส',
+          'ยกเว้นโทษให้แก่ผู้หญิงและเด็กทุกคนในนครรัฐ',
+          'มีบทลงโทษเฉพาะการกักขังและริบทรัพย์เท่านั้น ไม่มีการประหารชีวิต'
+        ],
+        ans: 1,
+        exp: 'กฎหมายฮัมมูราบีแบ่งบุคคลเป็น 3 ชนชั้น: เสรีชนชั้นสูง, สามัญชน, และทาส บทลงโทษตาต่อตาฟันต่อฟันใช้จริงเฉพาะคนในชนชั้นเดียวกันเท่านั้น'
+      },
+      {
+        id: 5,
+        cat: 'history',
+        q: 'สิ่งมหัศจรรย์ของโลกยุคโบราณสิ่งใดที่สร้างขึ้นในดินแดนเมโสโปเตเมีย โดยกษัตริย์เนบูคัดเนสซาร์ที่ 2?',
+        options: [
+          'วิหารพาร์เธนอน',
+          'สวนลอยแห่งบาบิโลน (Hanging Gardens of Babylon)',
+          'เทวรูปซุสแห่งโอลิมเปีย',
+          'ประภาคารฟาโรสแห่งอเล็กซานเดรีย'
+        ],
+        ans: 1,
+        exp: 'สวนลอยบาบิโลนสร้างขึ้นโดยพระเจ้าเนบูคัดเนสซาร์ที่ 2 แห่งอาณาจักรบาบิโลเนียใหม่ (คาลเดียน) เพื่อให้มเหสีหายคิดถึงบ้านเกิด'
+      },
+
+      // Category: History (Greece)
+      {
+        id: 6,
+        cat: 'history',
+        q: 'ลักษณะทางภูมิประเทศของกรีกโบราณส่งผลต่อพัฒนาการทางการเมืองอย่างไรมากที่สุด?',
+        options: [
+          'มีที่ราบลุ่มแม่น้ำขนาดใหญ่ ทำให้รวมศูนย์อำนาจเป็นจักรวรรดิรวมศูนย์ได้ง่าย',
+          'เป็นภูเขาสูงสลับซับซ้อน ทำให้เกิดการแยกตัวเป็น "นครรัฐอิสระ" (Polis) ต่างคนต่างปกครอง',
+          'เป็นทะเลทรายกว้างใหญ่ ทำให้ชาวกรีกต้องเร่ร่อนเลี้ยงสัตว์',
+          'มีป่าทึบหนาทึบ ทำให้ไม่มีการติดต่อค้าขายทางทะเลกับภายนอก'
+        ],
+        ans: 1,
+        exp: 'ภูมิประเทศกรีกเต็มไปด้วยเทือกเขาตัดขาดจากกัน ทำให้เกิดนครรัฐอิสระ (Polis) เช่น เอเธนส์ สปาร์ตา'
+      },
+      {
+        id: 7,
+        cat: 'history',
+        q: 'ชาวกรีกโบราณเรียกตนเองและอารยธรรมดั้งเดิมของตนเองด้วยคำว่าอะไร?',
+        options: [
+          'ชาวฟินิเชียน (Phoenicians)',
+          'ชาวเฮลลีน (Hellenes) และอารยธรรมเฮลเลนิก',
+          'ชาวอามอไรต์ (Amorites)',
+          'ชาวโรมัน (Romans)'
+        ],
+        ans: 1,
+        exp: 'ชาวกรีกโบราณเรียกตนเองว่า "ชาวเฮลลีน" (Hellenes) และเรียกแผ่นดินของตนว่า "เฮลลัส" (Hellas)'
+      },
+      {
+        id: 8,
+        cat: 'history',
+        q: 'เหตุผลสำคัญที่สุดที่ทำให้นครรัฐสปาร์ตาต้องจัดระเบียบสังคมแบบ "คณาธิปไตยทหารนิยม" อันเข้มงวดคือข้อใด?',
+        options: [
+          'ต้องการเตรียมกองทัพเพื่อแล่นเรือไปพิชิตทวีปแอฟริกา',
+          'เพื่อควบคุมและกดดันประชากรทาส "เฮล็อต" (Helots) ซึ่งมีจำนวนมากกว่าชาวสปาร์ตาหลายเท่ามิให้ก่อกบฏ',
+          'เพราะสปาร์ตาไม่มีกำแพงเมืองธรรมชาติป้องกันข้าศึกทางทะเล',
+          'เพื่อแข่งขันด้านกีฬาโอลิมปิกกับเอเธนส์ในทุกๆ ปี'
+        ],
+        ans: 1,
+        exp: 'สปาร์ตามีชนชั้นทาสเกษตรกรรมที่เรียกว่า "เฮล็อต" (Helots) มากมายมหาศาล จึงต้องฝึกทหารเข้มงวดแต่เด็กเพื่อป้องกันการลุกฮือกบฏ'
+      },
+      {
+        id: 9,
+        cat: 'history',
+        q: 'สงครามที่พันธมิตรนครรัฐกรีก (นำโดยเอเธนส์และสปาร์ตา) ร่วมมือกันสู้ศึกจนได้รับชัยชนะ คือสงครามใด?',
+        options: [
+          'สงครามเพโลพอนนีเซียน (Peloponnesian War)',
+          'สงครามเปอร์เซีย (Greco-Persian Wars)',
+          'สงครามพิชิตโทรจัน (Trojan War)',
+          'สงครามปิวนิก (Punic Wars)'
+        ],
+        ans: 1,
+        exp: 'สงครามเปอร์เซีย นครรัฐกรีกร่วมมือกันต้านการรุกรานของจักรวรรดิเปอร์เซียจนชนะ (ต่างจากสงครามเพโลพอนนีเซียนที่กรีกรบกันเอง)'
+      },
+      {
+        id: 10,
+        cat: 'history',
+        q: 'ข้อใดเรียงลำดับเหตุการณ์ประวัติศาสตร์กรีกโบราณได้ถูกต้องตามกาลเวลา?',
+        options: [
+          'สงครามเพโลพอนนีเซียน &rarr; สงครามเปอร์เซีย &rarr; ยุคพระเจ้าอเล็กซานเดอร์มหาราช',
+          'สงครามเปอร์เซีย &rarr; สงครามเพโลพอนนีเซียน &rarr; ยุคพระเจ้าอเล็กซานเดอร์มหาราช',
+          'ยุคพระเจ้าอเล็กซานเดอร์มหาราช &rarr; สงครามเปอร์เซีย &rarr; สงครามเพโลพอนนีเซียน',
+          'สงครามเพโลพอนนีเซียน &rarr; ยุคพระเจ้าอเล็กซานเดอร์มหาราช &rarr; สงครามเปอร์เซีย'
+        ],
+        ans: 1,
+        exp: 'ลำดับคือ: สงครามเปอร์เซีย (499-449 BC) &rarr; สงครามเพโลพอนนีเซียนที่กรีกรบกันเอง (431-404 BC) &rarr; มาซิโดเนียรวบรวมกรีกในยุคพระเจ้าอเล็กซานเดอร์มหาราช'
+      },
+
+      // Category: Thai Language (Reading & Prosody)
+      {
+        id: 11,
+        cat: 'thai',
+        q: 'คำประพันธ์ไทยชนิดใดที่มีการบังคับตำแหน่ง "ครุ" และ "ลหุ" ไว้อย่างเคร่งครัดตามฉันทลักษณ์?',
+        options: [
+          'โคลงสี่สุภาพ',
+          'กลอนสุภาพ (กลอนแปด)',
+          'ฉันท์',
+          'ร่ายสุภาพ'
+        ],
+        ans: 2,
+        exp: 'ฉันท์ คือคำประพันธ์ชนิดเดียวที่บังคับตำแหน่งคำครุและลหุอย่างเคร่งครัดตามแบบแผนบาลี-สันสกฤต'
+      },
+      {
+        id: 12,
+        cat: 'thai',
+        q: 'ข้อใดกล่าวถึงลักษณะของ "คำลหุ" (สัญลักษณ์ ุ) ได้อย่างถูกต้องแม่นยำ?',
+        options: [
+          'คำที่มีตัวสะกดในมาตราแม่กง กน กม',
+          'คำที่ไม่มีตัวสะกดและประสมด้วยสระเสียงสั้นในแม่ ก กา รวมทั้งคำโดด เช่น ก็ บ่ ณ ธ',
+          'คำที่ประสมด้วยสระ อำ ไอ ใอ เอา',
+          'คำที่ประสมด้วยสระเสียงยาวในแม่ ก กา ทุกคำ'
+        ],
+        ans: 1,
+        exp: 'คำลหุ คือคำที่ไม่มีตัวสะกดและประสมสระเสียงสั้นในแม่ ก กา รวมถึงพยัญชนะโดดที่ออกเสียง อะ เช่น ก็, บ่, ณ, ธ'
+      },
+      {
+        id: 13,
+        cat: 'thai',
+        q: 'วรรค "วรพักตร์จะหมดจะหมอง" (อ่านว่า วะ-ระ-พัก-จะ-หมด-จะ-หมอง) มีจำนวนคำลหุกี่คำ?',
+        options: [
+          '2 คำ',
+          '3 คำ',
+          '4 คำ',
+          '5 คำ'
+        ],
+        ans: 2,
+        exp: 'แยกพยางค์: วะ (ลหุ) - ระ (ลหุ) - พัก (ครุ) - จะ (ลหุ) - หมด (ครุ) - จะ (ลหุ) - หมอง (ครุ) &rarr; มีคำลหุทั้งหมด 4 คำ (วะ, ระ, จะ, จะ)'
+      },
+      {
+        id: 14,
+        cat: 'thai',
+        q: 'การอ่านระดับใดที่มุ่งเน้น "การค้นหาความหมายแฝง นัยยะ หรือเจตนาที่ผู้เขียนซ่อนไว้ใต้ข้อความ"?',
+        options: [
+          'การแปลความ',
+          'การตีความ',
+          'การขยายความ',
+          'การคัดลอกความ'
+        ],
+        ans: 1,
+        exp: 'การตีความ คือการค้นหาความหมายแฝง เจตนา หรือแนวคิดหลักที่ผู้เขียนไม่ได้เขียนบอกตรงๆ'
+      },
+      {
+        id: 15,
+        cat: 'thai',
+        q: 'ข้อใดต่อไปนี้จัดเป็น "ข้อเท็จจริง" (Fact) ตามหลักการอ่านวิเคราะห์?',
+        options: [
+          'สถาปัตยกรรมแบบกรีกดูสวยงามและสง่างามกว่าสถาปัตยกรรมโรมัน',
+          'ประมวลกฎหมายฮัมมูราบีจารึกไว้ด้วยอักษรคูนิฟอร์มบนแท่งหินบะซอลต์สีดำ',
+          'การปกครองแบบสปาร์ตาน่าจะสร้างความกดดันให้เด็กมากที่สุดในโลกโบราณ',
+          'ชาวสุเมเรียนคงจะเป็นชนชาติที่ฉลาดที่สุดในยุคหินใหม่'
+        ],
+        ans: 1,
+        exp: 'ข้อ ข มีหลักฐานทางโบราณคดีที่พิสูจน์ได้ชัดเจน ส่วนข้ออื่นมีคำแสดงความรู้สึก/คาดเดา เช่น "ดูสวยงามกว่า", "น่าจะ", "คงจะ"'
+      },
+
+      // Category: Mattanaphatha
+      {
+        id: 16,
+        cat: 'mattan',
+        q: 'ชื่อเรื่อง "มัทนะพาธา" มีความหมายตรงกับข้อใด?',
+        options: [
+          'ความรักอันบริสุทธิ์ของเทพธิดาบนสรวงสวรรค์',
+          'ความเจ็บปวดหรือความเดือดร้อนอันเกิดจากความรัก',
+          'สงครามแย่งชิงสตรีผู้เลอโฉมแห่งเมืองหัสตินาปุระ',
+          'ตำนานการลงทัณฑ์ของเหล่าทวยเทพ'
+        ],
+        ans: 1,
+        exp: 'มทน (ความรัก) + พาธา (ความเจ็บปวด/เบียดเบียน) = ความเจ็บปวดหรือความเดือดร้อนอันเกิดจากความรัก'
+      },
+      {
+        id: 17,
+        cat: 'mattan',
+        q: 'วรรณคดีสโมสรในรัชกาลที่ 6 ได้ตัดสินยกย่องวรรณคดีเรื่อง "มัทนะพาธา" ให้เป็นเลิศในฐานะใด?',
+        options: [
+          'ยอดของบทละครรำ',
+          'ยอดของบทละครพูดคำฉันท์',
+          'ยอดของลิลิตบรรยายศึกสงคราม',
+          'ยอดของกลอนนิทานคำกลอน'
+        ],
+        ans: 1,
+        exp: 'วรรณคดีสโมสรยกย่องให้มัทนะพาธาเป็น "ยอดของบทละครพูดคำฉันท์"'
+      },
+      {
+        id: 18,
+        cat: 'mattan',
+        q: 'ตัวละคร "มายาวิน" มีสถานะและตำแหน่งหน้าที่อย่างไรในเรื่องมัทนะพาธา?',
+        options: [
+          'เป็นกษัตริย์ผู้ครองเมืองหัสตินาปุระ',
+          'เป็นวิทยาธรผู้มีเวทมนตร์คาถาและเป็นข้ารับใช้ของสุเทษณ์',
+          'เป็นฤๅษีบำเพ็ญพรตในป่าหิมะวัน',
+          'เป็นทหารเอกผู้จงรักภักดีต่อท้าวชัยเสน'
+        ],
+        ans: 1,
+        exp: 'มายาวินเป็นวิทยาธร (ผู้มีวิชาอาคม) ทำหน้าที่เป็นข้ารับใช้ของสุเทษณ์ ใช้เวทมนตร์สะกดมัทนา'
+      },
+      {
+        id: 19,
+        cat: 'mattan',
+        q: 'จากข้อความ: "นางยังงงงวย ตูข้าจะแก้บัดนี้" คำว่า "ตูข้า" หมายถึงตัวละครใด?',
+        options: [
+          'สุเทษณ์',
+          'มัทนา',
+          'มายาวิน',
+          'ชัยเสน'
+        ],
+        ans: 2,
+        exp: 'คำว่า "ตูข้า" แปลว่า ข้าพเจ้า/บ่าวรับใช้ ในที่นี้คือ มายาวิน กล่าวต่อสุเทษณ์เพื่อขอคลายมนต์สะกดมัทนา'
+      },
+      {
+        id: 20,
+        cat: 'mattan',
+        q: 'ท้าวชัยเสนเป็นกษัตริย์ผู้ปกครองนครใด?',
+        options: [
+          'นครหัสตินาปุระ',
+          'นครมถุรา',
+          'นครอโยธยา',
+          'นครมิถิลา'
+        ],
+        ans: 0,
+        exp: 'ท้าวชัยเสนเป็นกษัตริย์ปกครองเมือง "หัสตินาปุระ"'
+      },
+      {
+        id: 21,
+        cat: 'mattan',
+        q: 'ตัวละครใดในเรื่องมัทนะพาธาได้รับการยกย่องว่า "มีความรักมั่นคง ซื่อสัตย์ และยึดมั่นในเกียรติของตนยิ่งชีพ"?',
+        options: [
+          'พระนางจัณฑี',
+          'นางมัทนา',
+          'สุเทษณ์เทพบุตร',
+          'มายาวิน'
+        ],
+        ans: 1,
+        exp: 'นางมัทนาได้รับการยกย่องสูงสุดในเรื่องความรักมั่นคง ซื่อสัตย์ ไม่ยอมรับรักใครเพียงเพราะอำนาจหรือคำขู่'
+      },
+      {
+        id: 22,
+        cat: 'mattan',
+        q: 'ข้อใดคือ "จุดอ่อนหรือข้อเสียสำคัญของท้าวชัยเสน" ที่ทำให้เกิดโศกนาฏกรรมในเรื่อง?',
+        options: [
+          'เป็นคนขลาดกลัว ไม่กล้าออกรบในสนามศึก',
+          'เป็นคนหูเบา เชื่อคนง่าย และขาดการไตร่ตรองด้วยวิจารณญาณ',
+          'เป็นคนตระหนี่ถี่เหนียว ไม่ยอมปูนบำเหน็จทหาร',
+          'เป็นคนมักมากในกามคุณและละเลยราชกิจบ้านเมือง'
+        ],
+        ans: 1,
+        exp: 'ท้าวชัยเสนมีนิสัยหูเบา หลงเชื่อคำใส่ร้ายของพระนางจัณฑีโดยไม่ได้ไต่สวนความจริงให้ถ่องแท้จนสั่งประหารมัทนา'
+      },
+      {
+        id: 23,
+        cat: 'mattan',
+        q: 'บทกลอนอมตะ "ความรักเหมือนโรคา บันดาลตาให้มืดมน..." ใครเป็นผู้กล่าวในเรื่อง?',
+        options: [
+          'นางมัทนา',
+          'ท้าวชัยเสน',
+          'พระนนทิ',
+          'ฤๅษีกาละทรรศิน'
+        ],
+        ans: 2,
+        exp: 'พระนนทิ (นนทิเสนาบดี) เป็นผู้กล่าวบทประพันธ์นี้ เพื่อเปรียบเทียบความรักว่าทำให้ตามืดบอดเหมือนโรคา'
+      },
+      {
+        id: 24,
+        cat: 'mattan',
+        q: 'ดอกไม้ที่มายาวินทูลแนะสุเทษณ์ให้สาปมัทนาไปจุติในโลกมนุษย์คือดอกอะไร และในเรื่องเรียกว่าอะไร?',
+        options: [
+          'ดอกบัว (ปทุมมา)',
+          'ดอกมะลิ (มะลิวัลย์)',
+          'ดอกกุหลาบ (กุพฺชกะ)',
+          'ดอกชบา (ชบาแก้ว)'
+        ],
+        ans: 2,
+        exp: 'ดอกกุหลาบ หรือ ดอกกุพฺชกะ (กุพชกะ) เป็นดอกไม้ที่มีกลิ่นหอมและมีหนามแหลมคม'
+      },
+      {
+        id: 25,
+        cat: 'mattan',
+        q: 'ข้อใดไม่ใช่คำศัพท์ที่แปลว่า "เทวดา"?',
+        options: [
+          'สุร',
+          'อมร',
+          'เทวา',
+          'คนธรรพ์'
+        ],
+        ans: 3,
+        exp: 'สุร, อมร, เทวา แปลว่า เทวดา ส่วน "คนธรรพ์" เป็นชาวสวรรค์ชั้นจาตุมหาราชิกาจัดเป็นกึ่งเทวดา/คนธรรพ์ ไม่ใช่ความหมายตรงของเทวดาชั้นผู้ใหญ่'
+      },
+
+      // Category: Anti-Corruption
+      {
+        id: 26,
+        cat: 'anticorrupt',
+        q: 'การคิดแบบ "ระบบคิดฐาน 2" (Digital Thinking) ในวิชาต้านทุจริต มีจุดเน้นสำคัญตรงกับข้อใด?',
+        options: [
+          'คิดแบบประนีประนอม อะลุ่มอล่วย เอาประโยชน์ของทั้งสองฝ่ายมาเฉลี่ยกัน',
+          'แยกแยะประโยชน์ส่วนตนและประโยชน์ส่วนรวมออกจากกันอย่างเด็ดขาด (0 คือประโยชน์ส่วนรวม, 1 คือประโยชน์ส่วนตน)',
+          'การนำทรัพย์สินของราชการมาใช้ในยามจำเป็นแล้วค่อยคืนเงินทีหลัง',
+          'การจัดลำดับความสำคัญของงานราชการตามความสนิทสนม'
+        ],
+        ans: 1,
+        exp: 'ระบบคิดฐาน 2 แยกประโยชน์ส่วนตนกับประโยชน์ส่วนรวมอย่างเด็ดขาด ถูกคือถูก ผิดคือผิด ไม่มีข้อยกเว้น'
+      },
+      {
+        id: 27,
+        cat: 'anticorrupt',
+        q: 'พฤติกรรมในข้อใดจัดเป็น "ระบบคิดฐาน 10" (Analog Thinking) ที่เป็นบ่อเกิดของการทุจริต?',
+        options: [
+          'ไม่รับของขวัญหรือกระเช้าปีใหม่จากบริษัทที่กำลังยื่นซองประมูลงานราชการ',
+          'นำกระดาษและเครื่องพิมพ์ของสำนักงานไปพิมพ์การบ้านให้บุตรที่บ้าน โดยคิดว่า "นิดๆ หน่อยๆ ไม่เป็นไร"',
+          'เดินทางไปราชการต่างจังหวัดด้วยรถยนต์ส่วนตัวและไม่เบิกค่าน้ำมันส่วนเกิน',
+          'แจ้งตำรวจทันทีเมื่อพบเห็นการลักลอบตัดไม้ทำลายป่า'
+        ],
+        ans: 1,
+        exp: 'การนำทรัพย์สินราชการไปใช้เรื่องส่วนตัวด้วยความคิดว่า "นิดๆ หน่อยๆ ใครๆ ก็ทำ" คือความคิดแบบฐาน 10'
+      },
+      {
+        id: 28,
+        cat: 'anticorrupt',
+        q: 'สถานการณ์ใดเข้าข่าย "ผลประโยชน์ทับซ้อน" (Conflict of Interests: COI) ชัดเจนที่สุด?',
+        options: [
+          'ข้าราชการเข้าอบรมสัมมนาเพื่อเพิ่มพูนทักษะการทำงานตามคำสั่งผู้บังคับบัญชา',
+          'กรรมการตรวจรับพัสดุรับประทานอาหารร่วมกับและรับของกำนัลมีมูลค่าสูงจากบริษัทที่เข้าร่วมประมูลงาน',
+          'ครูสอนเสริมนักเรียนในห้องเรียนหลังเลิกเรียนโดยไม่เก็บค่าใช้จ่าย',
+          'เจ้าหน้าที่ดับเพลิงปฏิบัติหน้าที่ระงับเหตุไฟไหม้ในวันหยุดนักขัตฤกษ์'
+        ],
+        ans: 1,
+        exp: 'การรับเลี้ยงอาหารหรือของกำนัลจากบริษัทคู่สัญญาจะส่งผลต่อความเป็นกลางในการตรวจรับงานราชการ เกิดภาวะผลประโยชน์ทับซ้อน'
+      },
+      {
+        id: 29,
+        cat: 'anticorrupt',
+        q: 'คำว่า "Revolving Door" หรือ ปรากฏการณ์ประตูกล ในประเด็นผลประโยชน์ทับซ้อน หมายถึงข้อใด?',
+        options: [
+          'การติดตั้งประตูกลอัตโนมัติในสถานที่ราชการเพื่อความปลอดภัย',
+          'การที่เจ้าหน้าที่รัฐลาออกหรือเกษียณแล้วไปทำงานในบริษัทเอกชนคู่สัญญาที่ตนเคยกำกับดูแลหรือให้สัมปทาน',
+          'การโยกย้ายข้าราชการเวียนไปตามกระทรวงต่างๆ ทุก 4 ปี',
+          'การรับสินบนแบบแลกเปลี่ยนหมุนเวียนระหว่างข้าราชการด้วยกัน'
+        ],
+        ans: 1,
+        exp: 'Revolving Door คือการที่อดีตเจ้าหน้าที่รัฐไปทำงานในบริษัทเอกชนที่ตนเคยมีอำนาจกำกับดูแล ทำให้เกิดการเอื้อประโยชน์และใช้เส้นสายภายใน'
+      },
+      {
+        id: 30,
+        cat: 'anticorrupt',
+        q: 'การที่เจ้าหน้าที่รัฐนำ "รถหลวง" ไปใช้ในงานพิธีมงคลสมรสส่วนตัวในวันเสาร์-อาทิตย์ จัดเป็นความผิดในข้อใด?',
+        options: [
+          'การใช้ข้อมูลภายในของราชการเพื่อหากำไร',
+          'การใช้ทรัพย์สินของทางราชการเพื่อประโยชน์ส่วนตน (Misuse of public property)',
+          'การจัดซื้อจัดจ้างอย่างไม่เป็นธรรม',
+          'การทำงานนอกเวลาโดยไม่ได้รับอนุญาต'
+        ],
+        ans: 1,
+        exp: 'การนำรถยนต์หลวงไปใช้งานส่วนตัวถือเป็นการใช้ทรัพย์สินของราชการเพื่อประโยชน์ส่วนตน ขัดต่อหลักต้านทุจริต'
+      }
+    ];
+
+    // Quiz State
+    let userAnswers = {};
+    let currentFilter = 'all';
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      const filtered = questions.filter(q => currentFilter === 'all' || q.cat === currentFilter);
+
+      let html = '';
+      filtered.forEach((q, idx) => {
+        const selected = userAnswers[q.id];
+        const isAnswered = selected !== undefined;
+        const isCorrect = isAnswered && selected === q.ans;
+
+        let badge = '';
+        if (q.cat === 'history') badge = '<span class="text-xs px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 font-semibold">📜 ประวัติศาสตร์สากล</span>';
+        else if (q.cat === 'thai') badge = '<span class="text-xs px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-semibold">🇹🇭 ภาษาไทย & ครุ-ลหุ</span>';
+        else if (q.cat === 'mattan') badge = '<span class="text-xs px-2 py-0.5 rounded bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 font-semibold">🌹 มัทนะพาธา</span>';
+        else if (q.cat === 'anticorrupt') badge = '<span class="text-xs px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 font-semibold">⚖️ ต้านทุจริต</span>';
+
+        html += `
+          <div class="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="font-display font-bold text-slate-400 text-xs sm:text-sm">ข้อที่ ${q.id}</span>
+              ${badge}
+            </div>
+            <h4 class="font-display font-bold text-slate-900 dark:text-white text-sm sm:text-base leading-snug">
+              ${q.q}
+            </h4>
+
+            <div class="space-y-2 text-xs sm:text-sm font-display">
+        `;
+
+        q.options.forEach((opt, optIdx) => {
+          let btnClass = 'bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-700 hover:bg-indigo-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200';
+          if (isAnswered) {
+            if (optIdx === q.ans) {
+              btnClass = 'bg-emerald-100 dark:bg-emerald-950/80 border-emerald-500 text-emerald-900 dark:text-emerald-200 font-bold';
+            } else if (optIdx === selected) {
+              btnClass = 'bg-rose-100 dark:bg-rose-950/80 border-rose-500 text-rose-900 dark:text-rose-200 font-bold';
+            }
+          }
+
+          html += `
+            <button onclick="handleAnswer(${q.id}, ${optIdx})" ${isAnswered ? 'disabled' : ''} class="w-full text-left p-3 rounded-xl border transition flex items-center justify-between ${btnClass}">
+              <span>${['ก.', 'ข.', 'ค.', 'ง.'][optIdx]} ${opt}</span>
+              ${isAnswered && optIdx === q.ans ? '<span class="text-emerald-600 dark:text-emerald-400 font-bold">✓ คำตอบที่ถูกต้อง</span>' : ''}
+              ${isAnswered && optIdx === selected && optIdx !== q.ans ? '<span class="text-rose-600 dark:text-rose-400 font-bold">✗ คำตอบที่คุณเลือก</span>' : ''}
+            </button>
+          `;
+        });
+
+        html += `</div>`;
+
+        // Explanation Box
+        if (isAnswered) {
+          html += `
+            <div class="p-3.5 rounded-xl ${isCorrect ? 'bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-300' : 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-900 dark:text-rose-300'} text-xs space-y-1">
+              <span class="font-bold font-display">${isCorrect ? '🎉 เก่งมาก! ตอบถูกต้อง' : '❌ ตอบยังไม่ถูก ลองดูเฉลยละเอียด:'}</span>
+              <p class="text-xs font-sans mt-0.5">${q.exp}</p>
+            </div>
+          `;
+        }
+
+        html += `</div>`;
+      });
+
+      container.innerHTML = html;
+      checkQuizProgress();
+    }
+
+    function handleAnswer(qId, choiceIdx) {
+      userAnswers[qId] = choiceIdx;
+      renderQuiz();
+    }
+
+    function filterQuiz(cat) {
+      currentFilter = cat;
+      ['all', 'history', 'thai', 'mattan', 'anticorrupt'].forEach(c => {
+        const btn = document.getElementById('filter-' + c);
+        if (btn) {
+          if (c === cat) {
+            btn.className = 'px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm';
+          } else {
+            btn.className = 'px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300';
+          }
+        }
+      });
+      renderQuiz();
+    }
+
+    function resetExam() {
+      userAnswers = {};
+      document.getElementById('quiz-result-box').classList.add('hidden');
+      renderQuiz();
+    }
+
+    function checkQuizProgress() {
+      const total = questions.length;
+      const answered = Object.keys(userAnswers).length;
+      if (answered === total) {
+        let correct = 0;
+        questions.forEach(q => {
+          if (userAnswers[q.id] === q.ans) correct++;
+        });
+        const resultBox = document.getElementById('quiz-result-box');
+        resultBox.classList.remove('hidden');
+        document.getElementById('quiz-score-display').textContent = `${correct} / ${total} คะแนน`;
+
+        let evalText = '';
+        if (correct >= 27) evalText = 'ยอดเยี่ยมมาก! คุณแม่นยำทุกประเด็น พร้อมลุยข้อสอบจริงและพิชิต Final Boss สบายมาก';
+        else if (correct >= 20) evalText = 'ผลงานดีมาก! ลองทบทวนจุดที่ผิดในหมวดประวัติศาสตร์และคำศัพท์มัทนะพาธาอีกนิดจะเต็ม 100%';
+        else evalText = 'อย่าเพิ่งท้อ! กลับไปอ่านสรุปย่อในแดชบอร์ด แล้วกดเริ่มใหม่เพื่อฝึกความจำ';
+
+        document.getElementById('quiz-evaluation').textContent = evalText;
+      }
+    }
+
+    // --- 6. Final Boss Interactive Logic ---
+    function handleBossChoice(choice) {
+      const feedback = document.getElementById('boss-feedback');
+      feedback.classList.remove('hidden');
+
+      if (choice === 'B') {
+        feedback.className = 'p-5 rounded-2xl bg-emerald-100 dark:bg-emerald-950/80 border-2 border-emerald-500 text-emerald-950 dark:text-emerald-200 text-xs sm:text-sm space-y-2';
+        feedback.innerHTML = `
+          <div class="font-bold text-base font-display flex items-center space-x-2">
+            <span>🏆 ยอดเยี่ยมที่สุด! ตอบถูกต้อง 100% (VICTORY!)</span>
+          </div>
+          <p>
+            <strong>วิเคราะห์เฉลยข้อสอบ:</strong> ในตอนจบ มัทนายังคงมีรักแท้มั่นคง ไม่ยอมผิดคำสาบานและไม่ยอมรับรักสุเทษณ์ สุเทษณ์จึงบันดาลโทสะสาปให้นาง <strong>กลายเป็นดอกกุหลาบตลอดกาล ไม่สามารถกลับคืนร่างมนุษย์ได้อีกเลย!</strong>
+          </p>
+          <p>
+            เมื่อท้าวชัยเสนยกทัพตามมาพบความจริงว่ามัทนาเป็นผู้บริสุทธิ์ ทุกอย่างก็สายไปแล้ว ทำได้เพียงขุดต้นกุหลาบมัทนานำกลับไปปลูกและรดน้ำดูแล ณ อุทยานเมืองหัสตินาปุระ สะท้อนให้เห็นว่า <em>"ความรักที่เกิดจากความลุ่มหลงและการใช้อำนาจบีบบังคับ นำมาซึ่งความสูญเสียที่ไม่สามารถแก้ไขได้"</em>
+          </p>
+        `;
+      } else {
+        feedback.className = 'p-5 rounded-2xl bg-rose-100 dark:bg-rose-950/80 border-2 border-rose-500 text-rose-950 dark:text-rose-200 text-xs sm:text-sm space-y-2';
+        feedback.innerHTML = `
+          <div class="font-bold text-base font-display flex items-center space-x-2">
+            <span>💀 ตอบผิด! ห้ามพลาดข้อนี้นะครับ</span>
+          </div>
+          <p>
+            นี่คือชอยส์หลอกที่ข้อสอบชอบเอามาดักนักเรียน! มัทนะพาธาเป็นวรรณคดีโศกนาฏกรรม (Tragedy) ตอนจบมัทนา <strong>ไม่ได้รับรักสุเทษณ์</strong> และ <strong>ไม่ได้กลับเป็นมนุษย์</strong> แต่นางถูกสาปให้เป็นดอกกุหลาบตลอดกาล!
+          </p>
+          <button onclick="document.getElementById('boss-feedback').classList.add('hidden')" class="mt-2 px-3 py-1.5 rounded-lg bg-rose-600 text-white font-bold text-xs">
+            ลองเลือกใหม่อีกครั้ง
+          </button>
+        `;
+      }
+    }
+
+    // --- 7. Download Self as HTML File ---
+    function downloadSelf() {
+      const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Exam_Master_M5_Comprehensive.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQuiz();
+      analyzeSyllables();
+    });
+  </script>
+</body>
+</html>
